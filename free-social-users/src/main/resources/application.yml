@@ -1,0 +1,55 @@
+server:
+  profiles:
+    active: default
+  port: 8081
+  max-http-header-size: 8KB
+
+  tomcat:
+    max-keep-alive-requests: 100
+    max-connections: 8192
+    connection-timeout: 5s
+    accept-count: 100
+    max-swallow-size: 2MB
+    max-http-post-size: 2MB
+    threads:
+      min-spare: 50
+      max: 300
+  error:
+    include-message: always
+  ssl:
+    enabled: false
+
+security:
+  require-ssl: false
+
+spring:
+  application:
+    name: free-social-users
+
+  output:
+    ansi:
+      enabled: ALWAYS
+
+  jackson:
+    default-property-inclusion: NON_NULL
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+  jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        jdbc:
+          lob:
+            non_contextual_creation: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/freesocial?useSSL=false
+    username: postgres
+    password: "root"
+    driver-class-name: org.postgresql.Driver
+    connection-timeout: 20000
+    max-pool-size: 250
+    idle-timeout: 300000
+    minIdle: 5

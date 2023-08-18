@@ -1,0 +1,15 @@
+server:
+  ssl:
+    enabled: true
+    key-alias: freesocial
+    key-password: changeit
+    key-store: classpath:keystore.jks
+    key-store-provider: SUN
+    key-store-type: JKS
+
+security:
+  require-ssl: true
+
+spring:
+  jpa:
+    generate-ddl: false

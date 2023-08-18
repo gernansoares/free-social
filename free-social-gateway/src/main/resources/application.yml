@@ -1,0 +1,28 @@
+server:
+  port: 9000
+
+spring:
+  main:
+    web-application-type: reactive
+
+  application:
+    name: free-social-gateway
+
+  cloud:
+    config:
+      enabled: true
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/freesocial?useSSL=false
+    username: postgres
+    password: "root"
+    driver-class-name: org.postgresql.Driver
+    connection-timeout: 20000
+    max-pool-size: 250
+    idle-timeout: 300000
+    minIdle: 5
+
+logging:
+  pattern:
+    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
+
