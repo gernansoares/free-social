@@ -14,6 +14,7 @@ Example project of how microservices can be used to create a social network
 * Spring Security
 * Spring Cloud Gateway
 * Spring WebFlux
+* Maven
 * JWT
-* PostgreSQL 
-* H2 database
+* PostgreSQL (for production)
+* H2 database (for testing)
