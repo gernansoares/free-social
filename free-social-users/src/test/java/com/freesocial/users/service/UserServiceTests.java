@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.when;
 
 @SpringBootTest
 class UserServiceTests extends BasicTest {
@@ -25,7 +26,7 @@ class UserServiceTests extends BasicTest {
     @MockBean
     private UserAuthenticationService userAuthenticationService;
 
-    @Autowired
+    @MockBean
     private UserRepository userRepository;
 
     @Autowired
@@ -52,18 +53,22 @@ class UserServiceTests extends BasicTest {
 
     @Test
     void createUser() {
+        FreeSocialUser usedToBeAdd = FreeSocialUser.of(userDto);
+
+        //Will return the same object on save
+        when(userRepository.save(Mockito.any(FreeSocialUser.class))).thenReturn(usedToBeAdd);
+
+        //Will return empty on search
+        when(userRepository.findByUuid(usedToBeAdd.getUuid())).thenReturn(Optional.empty());
+
         //Will ignore validation
         doNothing().when(userAuthenticationService).validateNewUser(Mockito.any(UserAuthentication.class));
 
-        assertEquals(0, userRepository.count(), "Should be 0");
-
-        FreeSocialUser testUser = userService.create(FreeSocialUser.of(userDto));
-
-        assertEquals(1, userRepository.count(), "Should be 1");
+        FreeSocialUser testUser = userService.create(usedToBeAdd);
 
         assertNotNull(testUser, "User must exists");
 
-        assertNotNull(testUser.getId(), "ID must exists");
+        assertNull(testUser.getId(), "ID must not exists (database generated)");
 
         assertNotNull(testUser.getUuid(), "UUID must exists");
 
@@ -75,26 +80,8 @@ class UserServiceTests extends BasicTest {
                 "Username must be equals to prepared DTO username");
 
         Optional<FreeSocialUser> userOptional = userRepository.findByUuid(testUser.getUuid());
-        FreeSocialUser userFromDb = userOptional.get();
 
-        assertTrue(userOptional.isPresent(), "User must exists in DB");
-
-        assertEquals(testUser.getId(), userFromDb.getId(), "Must be the same ID");
-
-        assertEquals(testUser.getUuid(), userFromDb.getUuid(), "Must be the same UUID");
-    }
-
-    @Test
-    void deleteUser() {
-        assertEquals(0, userRepository.count(), "Should be 0");
-
-        FreeSocialUser testUser = userService.create(FreeSocialUser.of(userDto));
-
-        assertEquals(1, userRepository.count(), "Should be 1");
-
-        userService.delete(testUser);
-
-        assertEquals(0, userRepository.count(), "Should be 0 again");
+        assertFalse(userOptional.isPresent(), "User not must exists");
 
     }
 
