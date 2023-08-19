@@ -1,7 +1,9 @@
 server:
   profiles:
     active: default
+
   port: 8081
+
   max-http-header-size: 8KB
 
   tomcat:
@@ -14,35 +16,13 @@ server:
     threads:
       min-spare: 50
       max: 300
+
   error:
     include-message: always
-  ssl:
-    enabled: false
-
-security:
-  require-ssl: false
 
 spring:
   application:
     name: free-social-users
-
-  output:
-    ansi:
-      enabled: ALWAYS
-
-  jackson:
-    default-property-inclusion: NON_NULL
-    serialization:
-      FAIL_ON_EMPTY_BEANS: false
-
-  jpa:
-    generate-ddl: true
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    properties:
-      hibernate:
-        jdbc:
-          lob:
-            non_contextual_creation: true
 
   datasource:
     url: jdbc:postgresql://localhost:5432/freesocial?useSSL=false

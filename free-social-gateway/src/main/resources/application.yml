@@ -1,4 +1,7 @@
 server:
+  profiles:
+    active: default
+
   port: 9000
 
 spring:
