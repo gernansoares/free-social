@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class UserAuthenticationService {
@@ -25,9 +27,11 @@ public class UserAuthenticationService {
         if (!BCrypt.checkpw(userAuthentication.getPasswordConfirm(), userAuthentication.getPassword())) {
             throw new IllegalArgumentException(ErroUtil.getMessage(Constants.PASSWORD_CONFIRMATION_NOT_MATCH));
         }
-        if (userAuthenticationRepository.getByUsernameIgnoreCase(userAuthentication.getUsername()).isPresent()) {
+        Optional<UserAuthentication> userAuthenticationOpt =
+                userAuthenticationRepository.getByUsernameIgnoreCase(userAuthentication.getUsername());
+        userAuthenticationOpt.ifPresent(s -> {
             throw new IllegalArgumentException(ErroUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE));
-        }
+        });
     }
 
 }

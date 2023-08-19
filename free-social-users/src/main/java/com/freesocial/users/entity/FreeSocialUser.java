@@ -40,8 +40,8 @@ public class FreeSocialUser {
 
     public static FreeSocialUser of(UserSignUpDTO dto) {
         FreeSocialUser user = new FreeSocialUser();
-        user.enabled = true;
         user.uuid = UUID.randomUUID().toString();
+        user.enabled = true;
         user.authentication = new UserAuthentication(dto.getUsername(), dto.getPassword(), dto.getPasswordConfirm(), user);
         user.profile = new UserProfile(dto.getName(), dto.getBio(), user);
         return user;

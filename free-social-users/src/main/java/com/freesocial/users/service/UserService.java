@@ -1,11 +1,15 @@
 package com.freesocial.users.service;
 
 import com.freesocial.lib.config.tests.BasicTest;
+import com.freesocial.lib.properties.ErroUtil;
+import com.freesocial.users.common.util.Constants;
 import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -29,12 +33,14 @@ public class UserService extends BasicTest {
     }
 
     /**
-     * Deleter a user
+     * Deleter a user using its UUID
      *
-     * @param user to be deleted
+     * @param user to be deleted UUID
      */
-    public void delete(FreeSocialUser user) {
-        userRepository.delete(user);
+    public void delete(String uuid) {
+        Optional<FreeSocialUser> user = userRepository.findByUuid(uuid);
+        user.orElseThrow(() -> new IllegalArgumentException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
+        userRepository.delete(user.get());
     }
 
 }

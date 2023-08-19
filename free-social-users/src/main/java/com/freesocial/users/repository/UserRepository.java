@@ -11,4 +11,6 @@ public interface UserRepository extends JpaRepository<FreeSocialUser, Long> {
 
     Optional<FreeSocialUser> findByUuid(String uuid);
 
+    Optional<FreeSocialUser> findByAuthentication_UsernameIgnoreCase(String username);
+
 }
