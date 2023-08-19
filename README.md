@@ -11,9 +11,9 @@ Example project of how microservices can be used to create a social network
 ## Used technologies:
 
 * Spring Boot 3
-* Spring Security 6 
-* Spring Cloud Gateway 4
-* Lombok
+* Spring Security
+* Spring Cloud Gateway
+* Spring WebFlux
 * JWT
 * PostgreSQL 
 * H2 database
