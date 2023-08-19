@@ -20,7 +20,7 @@ public class RestResponseEntityExceptionHandler {
     @ExceptionHandler(value = {IllegalArgumentException.class, NullPointerException.class, UserNotFoundException.class})
     protected ResponseEntity handleWrongInformation(Exception ex) {
         logger.error(ex.getMessage());
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.CONFLICT);
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})

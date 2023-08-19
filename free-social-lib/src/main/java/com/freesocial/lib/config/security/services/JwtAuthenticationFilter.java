@@ -22,9 +22,11 @@ import java.util.stream.Collectors;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    public static final String TOKEN_PREFIX = "Bearer ";
+    public static final String BEARER_TOKEN_PREFIX = "Bearer ";
 
-    public static final String HEADER_STRING = "Authorization";
+    public static final String SECURITY_HEADER = "Authorization";
+
+    public static final String HEADER_UUID = "uuid";
 
     @Autowired
     private JwtUtil jwtUtil;
@@ -34,13 +36,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     HttpServletResponse httpServletResponse,
                                     FilterChain filterChain) throws ServletException, IOException {
         try {
-            String authToken = httpServletRequest.getHeader(HEADER_STRING);
+            String authToken = httpServletRequest.getHeader(SECURITY_HEADER);
             if (Objects.nonNull(authToken)) {
 
-                authToken = authToken.replace(TOKEN_PREFIX, "");
+                authToken = authToken.replace(BEARER_TOKEN_PREFIX, "");
                 String username = jwtUtil.getUsernameFromToken(authToken);
 
-                if (jwtUtil.validateToken(authToken, httpServletRequest.getHeader("uuid"))) {
+                if (jwtUtil.validateToken(authToken, httpServletRequest.getHeader(HEADER_UUID))) {
                     Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
                     List<String> rolesMap = claims.get("role", List.class);
 

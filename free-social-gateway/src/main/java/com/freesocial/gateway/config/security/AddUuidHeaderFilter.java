@@ -1,6 +1,7 @@
 package com.freesocial.gateway.config.security;
 
 import com.freesocial.lib.config.security.JwtUtil;
+import com.freesocial.lib.config.security.services.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -29,7 +30,7 @@ public class AddUuidHeaderFilter implements GlobalFilter {
                     Authentication auth = c.getAuthentication();
                     String uuid = jwtUtil.getUuidFromToken(auth.getCredentials().toString());
                     ServerHttpRequest request = exchange.getRequest();
-                    request.mutate().header("uuid", uuid);
+                    request.mutate().header(JwtAuthenticationFilter.HEADER_UUID, uuid);
                     return chain.filter(exchange.mutate().request(request).build());
                 })
                 .switchIfEmpty(chain.filter(exchange));
