@@ -4,15 +4,12 @@ server:
 
   port: 8081
 
-  max-http-header-size: 8KB
-
   tomcat:
     max-keep-alive-requests: 100
     max-connections: 8192
     connection-timeout: 5s
     accept-count: 100
     max-swallow-size: 2MB
-    max-http-post-size: 2MB
     threads:
       min-spare: 50
       max: 300
@@ -23,6 +20,9 @@ server:
 spring:
   application:
     name: free-social-users
+
+  jpa:
+    generate-ddl: true
 
   datasource:
     url: jdbc:postgresql://localhost:5432/freesocial?useSSL=false
