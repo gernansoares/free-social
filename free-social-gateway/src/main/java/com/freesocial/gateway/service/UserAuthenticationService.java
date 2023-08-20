@@ -10,6 +10,8 @@ import com.freesocial.lib.config.security.UserInfo;
 import com.freesocial.lib.properties.ErroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -17,26 +19,30 @@ import java.util.Arrays;
 import java.util.Optional;
 
 @Service
-public class UserLoginService {
+public class UserAuthenticationService {
 
     @Autowired
     private UserAuthenticationRepository userAuthenticationRepository;
 
     /**
      * Loads user from database based on its username
+     *
      * @param username user's username
      * @return user's information including username, password, enabled and roles
      * @throws UsernameNotFoundException if user is not found
-     * @throws DisabledException if user is not enabled
+     * @throws DisabledException         if user is not enabled
      */
     public Mono<UserInfo> findByUsername(String username) throws UsernameNotFoundException, DisabledException {
         Optional<UserAuthentication> userOpt = userAuthenticationRepository.findByUsernameIgnoreCase(username);
-        userOpt.orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
+
+        if (!userOpt.isPresent()) {
+            return Mono.empty();
+        }
 
         UserAuthentication user = userOpt.get();
 
         if (!user.getUser().isEnabled()) {
-            throw new DisabledException(ErroUtil.getMessage(Constants.USER_DISABLED));
+            return Mono.empty();
         }
 
         return Mono.just(new UserInfo(user.getUsername(), user.getPassword(), user.getUser().getUuid(),

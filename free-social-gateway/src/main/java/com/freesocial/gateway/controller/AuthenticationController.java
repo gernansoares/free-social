@@ -2,7 +2,7 @@ package com.freesocial.gateway.controller;
 
 import com.freesocial.gateway.dto.AuthRequest;
 import com.freesocial.gateway.dto.AuthResponse;
-import com.freesocial.gateway.service.UserLoginService;
+import com.freesocial.gateway.service.UserAuthenticationService;
 import com.freesocial.lib.config.security.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping(value = "/auth")
+@RequestMapping("/auth")
 public class AuthenticationController {
 
     @Autowired
@@ -27,9 +27,9 @@ public class AuthenticationController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    private UserLoginService userService;
+    private UserAuthenticationService userService;
 
-    @PostMapping(value = "/login")
+    @PostMapping("/login")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Provides user authentication by checking username and password")
     @ApiResponses(value = {

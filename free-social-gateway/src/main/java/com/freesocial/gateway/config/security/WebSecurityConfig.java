@@ -1,7 +1,7 @@
 package com.freesocial.gateway.config.security;
 
 import com.freesocial.gateway.common.enums.AvailableRoutes;
-import com.freesocial.gateway.service.UserLoginService;
+import com.freesocial.gateway.service.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,7 +21,7 @@ import reactor.core.publisher.Mono;
 public class WebSecurityConfig {
 
     @Autowired
-    private UserLoginService userLoginService;
+    private UserAuthenticationService userAuthenticationService;
 
     @Autowired
     private AuthenticationManager authenticationManager;

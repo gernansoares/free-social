@@ -1,12 +1,11 @@
 package com.freesocial.gateway.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -14,6 +13,7 @@ import lombok.NoArgsConstructor;
 public class FreeSocialUser {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String uuid;
@@ -22,5 +22,13 @@ public class FreeSocialUser {
 
     @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
     private UserAuthentication authentication;
+
+    public static FreeSocialUser of(String username, String password, boolean enabled) {
+        FreeSocialUser user = new FreeSocialUser();
+        user.authentication = new UserAuthentication(username, password, user);
+        user.enabled = enabled;
+        user.uuid = UUID.randomUUID().toString();
+        return user;
+    }
 
 }

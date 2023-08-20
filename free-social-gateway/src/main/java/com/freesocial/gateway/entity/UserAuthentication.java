@@ -21,4 +21,10 @@ public class UserAuthentication {
 
     @OneToOne
     private FreeSocialUser user;
+
+    UserAuthentication(String username, String password, FreeSocialUser user) {
+        this.username = username;
+        this.password = password;
+        this.user = user;
+    }
 }
