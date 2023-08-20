@@ -35,24 +35,14 @@ class UserServiceTests extends BasicTest {
     @Autowired
     private UserUtils userUtils;
 
-    private UserSignUpDTO userDto;
-
-    @BeforeEach
-    void prepareDto() {
-        userDto = new UserSignUpDTO();
+    @Test
+    void createUser() {
+        UserSignUpDTO userDto = new UserSignUpDTO();
         userDto.setName("New user");
         userDto.setUsername(userDto.getName());
         userDto.setPassword("123123");
         userDto.setPasswordConfirm(userDto.getPassword());
-    }
 
-    @AfterEach
-    void deleteAll() {
-        userRepository.deleteAll();
-    }
-
-    @Test
-    void createUser() {
         FreeSocialUser usedToBeAdd = FreeSocialUser.of(userDto);
 
         //Will return the same object on save
