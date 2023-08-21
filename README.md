@@ -1,14 +1,15 @@
 # free-social
 
-Example project of how microservices can be used to create a social network
+Example project of a social network implemented with microservices architecture
 
 ## Projects
 
-* free-social-lib: Common classes and configurations for all projects
-* free-social-gateway: API Gateway which controls authentication and authorization, downstream requests to services
-* free-social-users: Users microservice, controls CRUD operations and testing
+* _**free-social-lib**_: Common classes and configurations for all projects
+* _**free-social-gateway**_: API Gateway which controls authentication and authorization, also downstream requests to services
+* _**free-social-token-jobs**_: Register and invalidate tokens issued by gateway
+* _**free-social-users**_: Users service, controls CRUD operations
 
-## Used technologies:
+## Main technologies
 
 * Spring Boot 3
 * Spring Security
@@ -16,5 +17,12 @@ Example project of how microservices can be used to create a social network
 * Spring WebFlux
 * Maven
 * JWT
+* Apache Kafka
 * PostgreSQL (for production)
-* H2 database (for testing)
+* H2 database (in memory, for testing)
+
+## How to run
+
+You will **need to create a database called freesocial** and **[have Apache Kafka running at localhost:9092](https://www.geeksforgeeks.org/how-to-install-and-run-apache-kafka-on-windows/)**
+
+Execute **mvn install to install all dependencies** in your local repository before running

@@ -43,12 +43,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AuthenticationControllerIntegrationTests extends BasicTest {
 
     @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private UserAuthenticationService userAuthenticationService;
-
-    @Autowired
     private WebTestClient webTestClient;
 
     @Test

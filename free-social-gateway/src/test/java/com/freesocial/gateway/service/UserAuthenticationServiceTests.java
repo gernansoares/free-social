@@ -1,5 +1,6 @@
 package com.freesocial.gateway.service;
 
+import com.freesocial.gateway.dto.AuthRequest;
 import com.freesocial.gateway.entity.FreeSocialUser;
 import com.freesocial.gateway.repository.UserAuthenticationRepository;
 import com.freesocial.lib.config.exceptions.DisabledException;
@@ -11,8 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cloud.gateway.filter.factory.SaveSessionGatewayFilterFactory;
-import org.springframework.cloud.gateway.filter.factory.TokenRelayGatewayFilterFactory;
+import reactor.test.StepVerifier;
 
 import java.util.Optional;
 
@@ -37,9 +37,9 @@ class UserAuthenticationServiceTests extends BasicTest {
         when(userAuthenticationRepository.findByUsernameIgnoreCase(Mockito.any(String.class)))
                 .thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> {
-            userAuthenticationService.findByUsername(USERNAME);
-        }, "User does not exists");
+        StepVerifier.create(userAuthenticationService.login(new AuthRequest(USERNAME, "")))
+                .expectNextCount(0)
+                .expectComplete().verify();
     }
 
     @Test
@@ -50,22 +50,23 @@ class UserAuthenticationServiceTests extends BasicTest {
         when(userAuthenticationRepository.findByUsernameIgnoreCase(Mockito.any(String.class)))
                 .thenReturn(Optional.of(novo.getAuthentication()));
 
-        assertThrows(DisabledException.class, () -> {
-            userAuthenticationService.findByUsername(USERNAME);
-        }, "User is disabled");
+        StepVerifier.create(userAuthenticationService.login(new AuthRequest(USERNAME, "")))
+                .expectNextCount(0)
+                .expectComplete().verify();
     }
 
     @Test
     void loginWithCorrectUser() {
-        FreeSocialUser novo = FreeSocialUser.of("", "", true);
+        FreeSocialUser novo = FreeSocialUser.of(USERNAME,
+                "$2a$10$q.K3vE8WQEJKzDgnWBfe7O5Zwl2e1lz8UulpsBUlqYlcFa.Wa4NRG", true);
 
-        //User will be disabled
+        //User will be found and will be enabled
         when(userAuthenticationRepository.findByUsernameIgnoreCase(Mockito.any(String.class)))
                 .thenReturn(Optional.of(novo.getAuthentication()));
 
-        assertDoesNotThrow(() -> {
-            userAuthenticationService.findByUsername(USERNAME);
-        }, "User exists and is enabled");
+        StepVerifier.create(userAuthenticationService.login(new AuthRequest(USERNAME, "123123")))
+                .expectNextCount(1)
+                .expectComplete().verify();
     }
 
 }

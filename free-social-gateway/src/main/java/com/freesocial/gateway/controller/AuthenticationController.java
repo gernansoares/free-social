@@ -3,6 +3,7 @@ package com.freesocial.gateway.controller;
 import com.freesocial.gateway.dto.AuthRequest;
 import com.freesocial.gateway.dto.AuthResponse;
 import com.freesocial.gateway.service.UserAuthenticationService;
+import com.freesocial.lib.config.kafka.KafkaTopicConfig;
 import com.freesocial.lib.config.security.JwtUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -11,7 +12,7 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
@@ -24,10 +25,10 @@ public class AuthenticationController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    private UserAuthenticationService userService;
 
     @Autowired
-    private UserAuthenticationService userService;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @PostMapping("/login")
     @ResponseStatus(code = HttpStatus.OK)
@@ -37,9 +38,12 @@ public class AuthenticationController {
             @ApiResponse(responseCode = "401", description = "Incorrect login information"),
     })
     public Mono<ResponseEntity<AuthResponse>> login(@RequestBody @Valid AuthRequest ar) {
-        return userService.findByUsername(ar.getUsername())
-                .filter(userDetails -> BCrypt.checkpw(ar.getPassword(), userDetails.getPassword()))
-                .map(userDetails -> ResponseEntity.ok(new AuthResponse(jwtUtil.generateToken(userDetails))))
+        return userService.login(ar)
+                .flatMap(userDetails -> {
+                    String token = jwtUtil.generateToken(userDetails);
+                    kafkaTemplate.send(KafkaTopicConfig.TOKEN_REGISTRATION_TOPIC, token);
+                    return Mono.just(ResponseEntity.ok(new AuthResponse(token)));
+                })
                 .switchIfEmpty(Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()));
     }
 

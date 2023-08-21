@@ -13,6 +13,7 @@
         <module>free-social-lib</module>
         <module>free-social-gateway</module>
         <module>free-social-users</module>
+        <module>free-social-token-jobs</module>
     </modules>
 
     <properties>
@@ -71,6 +72,11 @@
             <version>5.4.0</version>
             <scope>test</scope>
             <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>3.0.4</version>
         </dependency>
     </dependencies>
 

@@ -15,7 +15,8 @@ public enum AvailableRoutes {
 
     ACTUATOR("/actuator/**", null, false),
     SESSION("/session/**", null, true),
-    NEW_LOGIN("/auth/**", null, false),
+    LOGIN("/auth/**", null, false),
+    LOGOUT("/logout/**", null, true),
     NEW_USER("/newuser/**", "http://localhost:8081/newuser/", false),
     USERS("/users/**", "http://localhost:8081/users/", true);
 

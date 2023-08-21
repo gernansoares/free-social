@@ -1,17 +1,14 @@
 package com.freesocial.gateway.service;
 
-import com.freesocial.gateway.common.util.Constants;
+import com.freesocial.gateway.dto.AuthRequest;
 import com.freesocial.gateway.entity.UserAuthentication;
 import com.freesocial.gateway.repository.UserAuthenticationRepository;
 import com.freesocial.lib.config.exceptions.DisabledException;
-import com.freesocial.lib.config.exceptions.UserNotFoundException;
 import com.freesocial.lib.config.security.AvailableRoles;
 import com.freesocial.lib.config.security.UserInfo;
-import com.freesocial.lib.properties.ErroUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -25,15 +22,13 @@ public class UserAuthenticationService {
     private UserAuthenticationRepository userAuthenticationRepository;
 
     /**
-     * Loads user from database based on its username
+     * Loads user from database based on its username, checks for password match and user status
      *
-     * @param username user's username
+     * @param request user's username and password
      * @return user's information including username, password, enabled and roles
-     * @throws UsernameNotFoundException if user is not found
-     * @throws DisabledException         if user is not enabled
      */
-    public Mono<UserInfo> findByUsername(String username) throws UsernameNotFoundException, DisabledException {
-        Optional<UserAuthentication> userOpt = userAuthenticationRepository.findByUsernameIgnoreCase(username);
+    public Mono<UserInfo> login(AuthRequest request) throws UsernameNotFoundException, DisabledException {
+        Optional<UserAuthentication> userOpt = userAuthenticationRepository.findByUsernameIgnoreCase(request.getUsername());
 
         if (!userOpt.isPresent()) {
             return Mono.empty();
@@ -41,7 +36,8 @@ public class UserAuthenticationService {
 
         UserAuthentication user = userOpt.get();
 
-        if (!user.getUser().isEnabled()) {
+        if (!user.getUser().isEnabled()
+                || !BCrypt.checkpw(request.getPassword(), user.getPassword())) {
             return Mono.empty();
         }
 
