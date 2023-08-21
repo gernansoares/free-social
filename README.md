@@ -23,6 +23,6 @@ Example project of a social network implemented with microservices architecture
 
 ## How to run
 
-You will **need to create a database called freesocial** and **[have Apache Kafka running at localhost:9092](https://www.geeksforgeeks.org/how-to-install-and-run-apache-kafka-on-windows/)**
+You will **need to create a database called freesocial** and **have Apache Kafka running at localhost:9092**, see installation guide for **[Windows](https://www.geeksforgeeks.org/how-to-install-and-run-apache-kafka-on-windows/)** and **[Linux](https://www.geeksforgeeks.org/how-to-install-kafka-with-zookeeper-on-ubuntu//)**
 
 Execute **mvn install to install all dependencies** in your local repository before running
