@@ -21,7 +21,7 @@ spring:
     idle-timeout: 300000
     minIdle: 5
 
-logging:
-  pattern:
-    level: '%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]'
-
+management:
+  tracing:
+    propagation:
+      type: b3

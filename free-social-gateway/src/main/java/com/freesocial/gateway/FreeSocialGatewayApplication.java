@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
+import reactor.core.publisher.Hooks;
 
 /**
  * Excludes com.freesocial.lib.config.security.services.* cause
@@ -18,6 +19,7 @@ public class FreeSocialGatewayApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(FreeSocialGatewayApplication.class, args);
+        Hooks.enableAutomaticContextPropagation();
     }
 
 }

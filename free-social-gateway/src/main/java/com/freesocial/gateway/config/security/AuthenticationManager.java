@@ -4,6 +4,7 @@ import com.freesocial.gateway.entity.UserToken;
 import com.freesocial.gateway.repository.UserTokenRepository;
 import com.freesocial.lib.config.security.JwtUtil;
 import io.jsonwebtoken.Claims;
+import io.micrometer.observation.annotation.Observed;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -32,25 +33,21 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        try {
-            String authToken = authentication.getCredentials().toString();
+        String authToken = authentication.getCredentials().toString();
 
-            return Mono.fromCallable(() -> userTokenRepository.findByToken(authToken))
-                    .flatMap(optional -> optional.map(Mono::just).orElseGet(Mono::empty))
-                    .map(dbToken -> jwtUtil.validateToken(authToken))
-                    .filter(valid -> valid)
-                    .switchIfEmpty(Mono.empty())
-                    .map(valid -> {
-                        Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
-                        List<String> rolesMap = claims.get("role", List.class);
-                        return new UsernamePasswordAuthenticationToken(
-                                jwtUtil.getUsernameFromToken(authToken),
-                                authToken,
-                                rolesMap.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-                        );
-                    });
-        } catch (Exception e) {
-        }
-        return Mono.empty();
+        return Mono.fromCallable(() -> userTokenRepository.findByToken(authToken))
+                .flatMap(optional -> optional.map(Mono::just).orElseGet(Mono::empty))
+                .map(dbToken -> jwtUtil.validateToken(authToken))
+                .filter(valid -> valid)
+                .switchIfEmpty(Mono.empty())
+                .map(valid -> {
+                    Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
+                    List<String> rolesMap = claims.get("role", List.class);
+                    return new UsernamePasswordAuthenticationToken(
+                            jwtUtil.getUsernameFromToken(authToken),
+                            authToken,
+                            rolesMap.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
+                    );
+                });
     }
 }
