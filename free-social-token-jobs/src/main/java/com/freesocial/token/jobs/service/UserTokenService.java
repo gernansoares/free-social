@@ -5,13 +5,14 @@ import com.freesocial.lib.properties.ErroUtil;
 import com.freesocial.token.jobs.common.util.Constants;
 import com.freesocial.token.jobs.entity.UserToken;
 import com.freesocial.token.jobs.repository.UserTokenRepository;
-import org.antlr.v4.runtime.Token;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@Transactional(rollbackFor = Exception.class)
 public class UserTokenService {
 
     @Autowired
@@ -20,7 +21,7 @@ public class UserTokenService {
     @Autowired
     private UserTokenRepository userTokenRepository;
 
-    public UserToken registarToken(String generatedToken) {
+    public UserToken registerToken(String generatedToken) {
         Optional<UserToken> tokenOpt = userTokenRepository.findByToken(generatedToken);
         tokenOpt.ifPresent(userToken -> {
             throw new IllegalArgumentException(ErroUtil.getMessage(Constants.TOKEN_ALREADY_EXISTS));
@@ -29,13 +30,17 @@ public class UserTokenService {
         return userTokenRepository.save(new UserToken(generatedToken, jwtUtil.getUuidFromToken(generatedToken)));
     }
 
-    public void removerToken(String tokenToRemove) {
+    public void removeToken(String tokenToRemove) {
         Optional<UserToken> tokenOpt = userTokenRepository.findByToken(tokenToRemove);
         tokenOpt.orElseThrow(() -> {
             throw new IllegalArgumentException(ErroUtil.getMessage(Constants.TOKEN_DOES_NOT_EXISTS));
         });
 
         userTokenRepository.delete(tokenOpt.get());
+    }
+
+    public void removeAllTokens(String userUuid) {
+        userTokenRepository.deleteByUserUuid(userUuid);
     }
 
 }

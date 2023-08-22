@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
-public class UserService extends BasicTest {
+public class UserService {
 
     @Autowired
     private UserAuthenticationService userAuthenticationService;

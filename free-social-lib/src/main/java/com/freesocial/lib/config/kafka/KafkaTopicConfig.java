@@ -15,6 +15,7 @@ public class KafkaTopicConfig {
 
     public static final String TOKEN_REGISTRATION_TOPIC = "token-registration";
     public static final String TOKEN_REMOVAL_TOPIC = "token-removal";
+    public static final String DELETE_ALL_TOKENS_TOPIC = "delete-all-tokens";
 
     public static final String BOOTSTRAP_ADRESS = "localhost:9092";
 

@@ -1,5 +1,7 @@
 package com.freesocial.users.controller;
 
+import com.freesocial.lib.config.kafka.KafkaTopicConfig;
+import com.freesocial.lib.config.security.services.JwtAuthenticationFilter;
 import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.service.UserProfileService;
 import com.freesocial.users.service.UserService;
@@ -10,12 +12,16 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/users")
 @Slf4j
 public class UserController {
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemplate;
 
     @Autowired
     private UserProfileService userProfileService;
@@ -30,7 +36,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void updateProfile(@RequestHeader String uuid,
+    public void updateProfile(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid,
                               @RequestBody @Valid UserProfileDTO profileDto) {
         log.info(String.format("Updating user with UUID %s profile", uuid));
         userProfileService.update(profileDto, uuid);
@@ -44,9 +50,10 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User deleted"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void delete(@RequestHeader String uuid) {
+    public void delete(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid) {
         log.info(String.format("Deleting user with UUID %s", uuid));
         userService.delete(uuid);
+        kafkaTemplate.send(KafkaTopicConfig.DELETE_ALL_TOKENS_TOPIC, uuid);
         log.info(String.format("User with UUID %s deleted successfully", uuid));
     }
 

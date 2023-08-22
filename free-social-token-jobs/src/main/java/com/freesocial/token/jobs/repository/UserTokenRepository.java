@@ -11,4 +11,6 @@ public interface UserTokenRepository extends JpaRepository<UserToken, Long> {
 
     Optional<UserToken> findByToken(String token);
 
+    void deleteByUserUuid(String userUuid);
+
 }

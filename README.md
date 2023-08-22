@@ -7,10 +7,11 @@ Example project of a social network implemented with microservices architecture
 * _**free-social-lib**_: Common classes and configurations for all projects
 * _**free-social-gateway**_: API Gateway which controls authentication and authorization, also downstream requests to services
 * _**free-social-token-jobs**_: Register and invalidate tokens issued by gateway
-* _**free-social-users**_: Users service, update and delete operations
+* _**free-social-users**_: Users service, CRUD operations
 
 ## Main technologies
 
+* Spring Framework 6
 * Spring Boot 3
 * Spring Security
 * Spring Cloud Gateway
@@ -33,7 +34,7 @@ You can see all supported endpoints in AvaiableRoutes enum at gateway project, b
 
 * **/auth/login** - For login
 * **/logout/logout** - For logout
-* **/newuser** - Create user
+* **/newuser** - Creates user
 * **/users** - Update and delete user
 
 ## Extra information
