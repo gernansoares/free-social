@@ -16,6 +16,7 @@ Example project of a social network implemented with microservices architecture
 * Spring Security
 * Spring Cloud Gateway
 * Spring WebFlux
+* Micrometer tracing
 * Maven
 * JWT
 * Apache Kafka
