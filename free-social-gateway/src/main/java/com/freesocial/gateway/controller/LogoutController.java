@@ -1,15 +1,9 @@
 package com.freesocial.gateway.controller;
 
-import com.freesocial.gateway.dto.AuthRequest;
-import com.freesocial.gateway.dto.AuthResponse;
-import com.freesocial.gateway.service.UserAuthenticationService;
 import com.freesocial.lib.config.kafka.KafkaTopicConfig;
-import com.freesocial.lib.config.security.JwtUtil;
-import io.micrometer.observation.annotation.Observed;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

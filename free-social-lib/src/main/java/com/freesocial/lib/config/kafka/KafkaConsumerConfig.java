@@ -2,7 +2,6 @@ package com.freesocial.lib.config.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
@@ -33,22 +32,11 @@ public class KafkaConsumerConfig {
         return new DefaultKafkaConsumerFactory<>(props);
     }
 
-    public ConcurrentKafkaListenerContainerFactory<String, String>
-    kafkaListenerContainerFactory(String groupId) {
-
+    public ConcurrentKafkaListenerContainerFactory<String, String> kafkaListenerContainerFactory(String groupId) {
         ConcurrentKafkaListenerContainerFactory<String, String> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(consumerFactory(groupId));
         return factory;
     }
 
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> tokenRegistrationKafkaListenerContainerFactory() {
-        return kafkaListenerContainerFactory(KafkaTopicConfig.TOKEN_REGISTRATION_TOPIC);
-    }
-
-    @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, String> tokenRemovalKafkaListenerContainerFactory() {
-        return kafkaListenerContainerFactory(KafkaTopicConfig.TOKEN_REMOVAL_TOPIC);
-    }
 }
