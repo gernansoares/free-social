@@ -1,0 +1,20 @@
+spring:
+  main:
+    web-application-type: reactive
+
+  application:
+    name: free-social-security
+
+  jpa:
+    generate-ddl: true
+    database-platform: org.hibernate.dialect.H2Dialect
+
+  datasource:
+    url: jdbc:h2:mem:freesocialtest
+    username: root
+    password: "root"
+    driver-class-name: org.h2.Driver
+    connection-timeout: 20000
+    max-pool-size: 250
+    idle-timeout: 300000
+    minIdle: 5

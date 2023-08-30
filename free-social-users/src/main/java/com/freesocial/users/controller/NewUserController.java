@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/newuser")
@@ -28,11 +29,11 @@ public class NewUserController {
             @ApiResponse(responseCode = "201", description = "Created user"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public UserDTO createUser(@RequestBody @Valid UserSignUpDTO userDto) {
+    public Mono<UserDTO> createUser(@RequestBody @Valid UserSignUpDTO userDto) {
         log.info(String.format("Adding user %s", userDto.getName()));
-        FreeSocialUser user = userService.create(FreeSocialUser.of(userDto));
+        FreeSocialUser user = userService.create(FreeSocialUser.of(userDto)).block();
         log.info(String.format("User %s added successfully with UUID %s", userDto.getName(), user.getUuid()));
-        return UserDTO.of(user);
+        return Mono.just(UserDTO.of(user));
     }
 
 }

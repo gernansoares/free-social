@@ -21,9 +21,6 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     @Autowired
-    private KafkaTemplate<String, String> kafkaTemplate;
-
-    @Autowired
     private UserProfileService userProfileService;
 
     @Autowired
@@ -53,7 +50,6 @@ public class UserController {
     public void delete(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid) {
         log.info(String.format("Deleting user with UUID %s", uuid));
         userService.delete(uuid);
-        kafkaTemplate.send(KafkaTopicConfig.DELETE_ALL_TOKENS_TOPIC, uuid);
         log.info(String.format("User with UUID %s deleted successfully", uuid));
     }
 

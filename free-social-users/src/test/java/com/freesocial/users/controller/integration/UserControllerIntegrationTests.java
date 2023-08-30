@@ -3,6 +3,8 @@ package com.freesocial.users.controller.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freesocial.lib.config.security.services.JwtAuthenticationFilter;
 import com.freesocial.lib.config.tests.BasicTest;
+import com.freesocial.users.FreeSocialUsersApplication;
+import com.freesocial.users.controller.UserController;
 import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.dto.UserSignUpDTO;
 import com.freesocial.users.entity.FreeSocialUser;
@@ -11,9 +13,17 @@ import com.freesocial.users.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
@@ -23,8 +33,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@AutoConfigureMockMvc(addFilters = false)
-@SpringBootTest
+@SpringBootTest(classes = FreeSocialUsersApplication.class)
+@EnableAutoConfiguration(exclude = {ReactiveUserDetailsServiceAutoConfiguration.class, ReactiveSecurityAutoConfiguration.class})
+@AutoConfigureWebTestClient
 class UserControllerIntegrationTests extends BasicTest {
 
     @Autowired
@@ -34,7 +45,7 @@ class UserControllerIntegrationTests extends BasicTest {
     private UserService userService;
 
     @Autowired
-    private MockMvc mockMvc;
+    private WebTestClient webTestClient;
 
     private FreeSocialUser addedUser;
 
@@ -51,7 +62,7 @@ class UserControllerIntegrationTests extends BasicTest {
         userToBeAdd.setPassword("123456");
         userToBeAdd.setPasswordConfirm(userToBeAdd.getPassword());
 
-        addedUser = userService.create(FreeSocialUser.of(userToBeAdd));
+        addedUser = userService.create(FreeSocialUser.of(userToBeAdd)).block();
     }
 
     @Test
@@ -66,11 +77,12 @@ class UserControllerIntegrationTests extends BasicTest {
         userProfileDTO.setName("New name");
         userProfileDTO.setBio("New bio");
 
-        mockMvc.perform(put("/users")
+        webTestClient.put().uri("/users")
                 .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(new ObjectMapper().writeValueAsString(userProfileDTO)))
-                .andExpect(status().isOk());
+                .bodyValue(new ObjectMapper().writeValueAsString(userProfileDTO))
+                .exchange()
+                .expectStatus().isOk();
 
         //Updates the user
         addedUser = userRepository.findByUuid(addedUser.getUuid()).get();
@@ -88,9 +100,10 @@ class UserControllerIntegrationTests extends BasicTest {
     void deleteUser() throws Exception {
         assertEquals(1, userRepository.count(), "Must be 1");
 
-        mockMvc.perform(delete("/users")
-                .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid()))
-                .andExpect(status().isOk());
+        webTestClient.delete().uri("/users")
+                .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
+                .exchange()
+                .expectStatus().isOk();
 
         assertEquals(0, userRepository.count(), "Must be 0");
     }

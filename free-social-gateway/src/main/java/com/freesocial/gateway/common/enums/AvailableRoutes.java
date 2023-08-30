@@ -13,8 +13,8 @@ import lombok.Getter;
 @Getter
 public enum AvailableRoutes {
 
-    LOGIN("/auth/**", null, false),
-    LOGOUT("/logout/**", null, true),
+    LOGIN("/auth/**", "http://localhost:8082/auth/", false),
+    LOGOUT("/logout/**", "http://localhost:8082/logout/", true),
     NEW_USER("/newuser/**", "http://localhost:8081/newuser/", false),
     USERS("/users/**", "http://localhost:8081/users/", true);
 

@@ -19,13 +19,19 @@ public class UserProfileService {
     @Autowired
     private UserProfileRepository userProfileRepository;
 
+    /**
+     * Update user's profile
+     *
+     * @param dto new profile information
+     * @param userUuid identifies the user
+     */
     public void update(UserProfileDTO dto, String userUuid) {
         Optional<UserProfile> optUser = userProfileRepository.findByUser_Uuid(userUuid);
-        optUser.orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE)));
 
-        UserProfile user = optUser.get();
+        UserProfile user = optUser.orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
         user.setName(dto.getName());
         user.setBio(dto.getBio());
+
         userProfileRepository.save(user);
     }
 

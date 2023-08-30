@@ -6,8 +6,6 @@ import com.freesocial.users.dto.UserSignUpDTO;
 import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.entity.UserAuthentication;
 import com.freesocial.users.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,7 +52,7 @@ class UserServiceTests extends BasicTest {
         //Will ignore validation
         doNothing().when(userAuthenticationService).validateNewUser(Mockito.any(UserAuthentication.class));
 
-        FreeSocialUser testUser = userService.create(usedToBeAdd);
+        FreeSocialUser testUser = userService.create(usedToBeAdd).block();
 
         assertNotNull(testUser, "User must exists");
 
