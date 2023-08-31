@@ -8,6 +8,7 @@ Example project of a social network implemented with microservices architecture
 * _**free-social-gateway**_: API Gateway, downstream requests to services
 * _**free-social-security**_: Authentication and token registration/invalidation
 * _**free-social-users**_: Users service, CRUD operations
+* _**free-social-posts**_: Posts service, CRUD operations
 
 ## Main technologies
 

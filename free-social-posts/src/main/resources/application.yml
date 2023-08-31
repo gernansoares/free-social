@@ -2,11 +2,14 @@ server:
   profiles:
     active: default
 
-  port: 9000
+  port: 8083
 
 spring:
   application:
-    name: free-social-gateway
+    name: free-social-posts
+
+  jpa:
+    generate-ddl: true
 
   datasource:
     url: jdbc:postgresql://localhost:5432/freesocial?useSSL=false
@@ -17,8 +20,3 @@ spring:
     max-pool-size: 250
     idle-timeout: 300000
     minIdle: 5
-
-management:
-  tracing:
-    propagation:
-      type: b3

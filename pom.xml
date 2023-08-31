@@ -14,6 +14,7 @@
         <module>free-social-gateway</module>
         <module>free-social-users</module>
         <module>free-social-security</module>
+        <module>free-social-posts</module>
     </modules>
 
     <properties>
