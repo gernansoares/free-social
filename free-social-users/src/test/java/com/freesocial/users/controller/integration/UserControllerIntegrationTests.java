@@ -1,10 +1,9 @@
 package com.freesocial.users.controller.integration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freesocial.lib.config.security.services.JwtAuthenticationFilter;
+import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.users.FreeSocialUsersApplication;
-import com.freesocial.users.controller.UserController;
 import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.dto.UserSignUpDTO;
 import com.freesocial.users.entity.FreeSocialUser;
@@ -13,29 +12,20 @@ import com.freesocial.users.service.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.security.reactive.ReactiveManagementWebSecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.reactive.ReactiveUserDetailsServiceAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = FreeSocialUsersApplication.class)
-@EnableAutoConfiguration(exclude = {ReactiveUserDetailsServiceAutoConfiguration.class, ReactiveSecurityAutoConfiguration.class})
 @AutoConfigureWebTestClient
+@ActiveProfiles(profiles = "tests-no-security")
 class UserControllerIntegrationTests extends BasicTest {
 
     @Autowired

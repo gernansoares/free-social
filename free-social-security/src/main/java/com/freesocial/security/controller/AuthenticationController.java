@@ -1,6 +1,6 @@
 package com.freesocial.security.controller;
 
-import com.freesocial.lib.config.security.JwtUtil;
+import com.freesocial.lib.config.security.jwt.JwtUtil;
 import com.freesocial.security.dto.AuthRequest;
 import com.freesocial.security.dto.AuthResponse;
 import com.freesocial.security.service.UserAuthenticationService;

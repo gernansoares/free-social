@@ -1,4 +1,4 @@
-package com.freesocial.lib.config.security.services;
+package com.freesocial.lib.config.security;
 
 public class JwtAuthenticationFilter {
 

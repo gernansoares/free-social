@@ -1,7 +1,6 @@
-package com.freesocial.lib.config.security.services;
+package com.freesocial.lib.config.security;
 
-import com.freesocial.lib.config.exceptions.UserNotFoundException;
-import com.freesocial.lib.config.security.JwtUtil;
+import com.freesocial.lib.config.security.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;

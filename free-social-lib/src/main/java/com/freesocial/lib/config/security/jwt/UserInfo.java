@@ -1,6 +1,7 @@
-package com.freesocial.lib.config.security;
+package com.freesocial.lib.config.security.jwt;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.freesocial.lib.config.security.AvailableRoles;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;

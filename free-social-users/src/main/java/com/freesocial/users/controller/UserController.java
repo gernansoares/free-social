@@ -1,7 +1,6 @@
 package com.freesocial.users.controller;
 
-import com.freesocial.lib.config.kafka.KafkaTopicConfig;
-import com.freesocial.lib.config.security.services.JwtAuthenticationFilter;
+import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.service.UserProfileService;
 import com.freesocial.users.service.UserService;
@@ -12,7 +11,6 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

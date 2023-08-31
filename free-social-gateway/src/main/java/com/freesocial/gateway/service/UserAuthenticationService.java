@@ -5,7 +5,7 @@ import com.freesocial.gateway.entity.UserAuthentication;
 import com.freesocial.gateway.repository.UserAuthenticationRepository;
 import com.freesocial.lib.config.exceptions.DisabledException;
 import com.freesocial.lib.config.security.AvailableRoles;
-import com.freesocial.lib.config.security.UserInfo;
+import com.freesocial.lib.config.security.jwt.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;

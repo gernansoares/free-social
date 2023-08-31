@@ -1,6 +1,6 @@
 package com.freesocial.security.service;
 
-import com.freesocial.lib.config.security.JwtUtil;
+import com.freesocial.lib.config.security.jwt.JwtUtil;
 import com.freesocial.lib.properties.ErroUtil;
 import com.freesocial.security.common.util.Constants;
 import com.freesocial.security.entity.UserToken;

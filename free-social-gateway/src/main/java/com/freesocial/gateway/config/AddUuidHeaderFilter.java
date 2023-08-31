@@ -1,7 +1,7 @@
 package com.freesocial.gateway.config;
 
-import com.freesocial.lib.config.security.JwtUtil;
-import com.freesocial.lib.config.security.services.JwtAuthenticationFilter;
+import com.freesocial.lib.config.security.jwt.JwtUtil;
+import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;

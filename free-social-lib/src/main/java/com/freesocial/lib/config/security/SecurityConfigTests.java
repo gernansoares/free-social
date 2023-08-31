@@ -1,10 +1,6 @@
-package com.freesocial.users.config;
+package com.freesocial.lib.config.security;
 
-import com.freesocial.lib.config.security.AuthenticationManager;
-import com.freesocial.lib.config.security.DefaultSecurityConfig;
-import com.freesocial.lib.config.security.SecurityContextRepository;
 import com.freesocial.lib.config.util.Profiles;
-import com.freesocial.users.service.UserAuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,11 +12,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
  * Defines the configuration for securing internal API access
  */
 @Configuration
-@Profile("!" + Profiles.TESTS_NO_SECURITY)
-public class SecurityConfig extends DefaultSecurityConfig {
-
-    @Autowired
-    private UserAuthenticationService userAuthenticationService;
+@Profile(Profiles.TESTS_NO_SECURITY)
+public class SecurityConfigTests extends DefaultSecurityConfig {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -33,9 +26,7 @@ public class SecurityConfig extends DefaultSecurityConfig {
         super.prepareSecurity(http);
 
         http.authorizeExchange((auth) -> auth
-                .pathMatchers("/newuser/**").permitAll()
-                .pathMatchers("/users/**").authenticated()
-                .anyExchange().denyAll()
+                .anyExchange().permitAll()
         );
 
         return http.build();

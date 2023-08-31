@@ -1,6 +1,5 @@
 package com.freesocial.security.entity;
 
-import com.freesocial.lib.config.security.JwtUtil;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

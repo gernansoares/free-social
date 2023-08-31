@@ -1,4 +1,4 @@
-package com.freesocial.lib.config.security;
+package com.freesocial.lib.config.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

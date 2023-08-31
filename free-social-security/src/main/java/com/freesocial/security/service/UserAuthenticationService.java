@@ -2,7 +2,7 @@ package com.freesocial.security.service;
 
 import com.freesocial.lib.config.exceptions.DisabledException;
 import com.freesocial.lib.config.security.AvailableRoles;
-import com.freesocial.lib.config.security.UserInfo;
+import com.freesocial.lib.config.security.jwt.UserInfo;
 import com.freesocial.security.repository.UserAuthenticationRepository;
 import com.freesocial.security.dto.AuthRequest;
 import com.freesocial.security.entity.UserAuthentication;
