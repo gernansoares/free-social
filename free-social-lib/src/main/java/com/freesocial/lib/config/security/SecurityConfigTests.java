@@ -23,7 +23,7 @@ public class SecurityConfigTests extends DefaultSecurityConfig {
 
     @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
-        super.prepareSecurity(http);
+        super.prepareDefaultSecurity(http);
 
         http.authorizeExchange((auth) -> auth
                 .anyExchange().permitAll()

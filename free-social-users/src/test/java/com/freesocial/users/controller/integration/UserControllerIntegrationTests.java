@@ -3,6 +3,7 @@ package com.freesocial.users.controller.integration;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.lib.config.tests.BasicTest;
+import com.freesocial.lib.config.util.Profiles;
 import com.freesocial.users.FreeSocialUsersApplication;
 import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.dto.UserSignUpDTO;
@@ -25,7 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 
 @SpringBootTest(classes = FreeSocialUsersApplication.class)
 @AutoConfigureWebTestClient
-@ActiveProfiles(profiles = "tests-no-security")
+@ActiveProfiles(profiles = Profiles.TESTS_NO_SECURITY)
 class UserControllerIntegrationTests extends BasicTest {
 
     @Autowired

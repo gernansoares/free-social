@@ -22,7 +22,7 @@ public class DefaultSecurityConfig {
     @Autowired
     private SecurityContextRepository securityContextRepository;
 
-    public void prepareSecurity(ServerHttpSecurity http) {
+    public void prepareDefaultSecurity(ServerHttpSecurity http) {
         http
                 .exceptionHandling(exceptionHandlingSpec ->
                         exceptionHandlingSpec
