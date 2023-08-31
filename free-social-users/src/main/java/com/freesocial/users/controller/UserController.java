@@ -1,7 +1,9 @@
 package com.freesocial.users.controller;
 
 import com.freesocial.lib.config.security.JwtAuthenticationFilter;
+import com.freesocial.users.dto.UserAuthenticationDTO;
 import com.freesocial.users.dto.UserProfileDTO;
+import com.freesocial.users.service.UserAuthenticationService;
 import com.freesocial.users.service.UserProfileService;
 import com.freesocial.users.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,13 +24,16 @@ public class UserController {
     private UserProfileService userProfileService;
 
     @Autowired
+    private UserAuthenticationService userAuthenticationService;
+
+    @Autowired
     private UserService userService;
 
-    @PutMapping
+    @PutMapping("/profile")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Update user's profile, UUID identifies the user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User updated"),
+            @ApiResponse(responseCode = "200", description = "Profile updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
     public void updateProfile(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid,
@@ -36,6 +41,20 @@ public class UserController {
         log.info(String.format("Updating user with UUID %s profile", uuid));
         userProfileService.update(profileDto, uuid);
         log.info(String.format("User with UUID %s profile updated successfully", uuid));
+    }
+
+    @PutMapping("/password")
+    @ResponseStatus(code = HttpStatus.OK)
+    @Operation(summary = "Update user's username and password, UUID identifies the user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Password updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid information"),
+    })
+    public void updateAuthentication(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid,
+                               @RequestBody @Valid UserAuthenticationDTO passwordDto) {
+        log.info(String.format("Updating user with UUID %s password", uuid));
+        userAuthenticationService.update(passwordDto, uuid);
+        log.info(String.format("User with UUID %s password updated successfully", uuid));
     }
 
     @DeleteMapping

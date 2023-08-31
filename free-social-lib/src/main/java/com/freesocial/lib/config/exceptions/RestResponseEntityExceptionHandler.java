@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 @Slf4j
 public class RestResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {IllegalArgumentException.class, NullPointerException.class, UserNotFoundException.class})
+    @ExceptionHandler(value = {IllegalArgumentException.class, NullPointerException.class, FreeSocialException.class})
     protected ResponseEntity handleWrongInformation(Exception ex) {
         log.error(ex.getMessage());
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);

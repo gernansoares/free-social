@@ -1,7 +1,9 @@
 package com.freesocial.lib.config.tests;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
+import org.mockito.junit.jupiter.MockitoSettings;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.lang.reflect.Method;

@@ -17,4 +17,8 @@ public class UserAuthenticationDTO {
     @Size(min = 6, max = 12, message = "{invalid.password}")
     private String password;
 
+    @NotNull
+    @Size(min = 6, max = 12, message = "{invalid.password}")
+    private String passwordConfirm;
+
 }

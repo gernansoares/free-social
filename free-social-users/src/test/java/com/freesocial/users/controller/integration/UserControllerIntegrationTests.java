@@ -5,17 +5,22 @@ import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.lib.config.util.Profiles;
 import com.freesocial.users.FreeSocialUsersApplication;
+import com.freesocial.users.common.util.UserUtils;
+import com.freesocial.users.dto.UserAuthenticationDTO;
 import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.dto.UserSignUpDTO;
 import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.repository.UserRepository;
 import com.freesocial.users.service.UserService;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
@@ -41,6 +46,11 @@ class UserControllerIntegrationTests extends BasicTest {
     private FreeSocialUser addedUser;
 
     private UserSignUpDTO userToBeAdd;
+
+    @BeforeAll
+    static void beforeAll() {
+        new UserUtils().setEncoder(new BCryptPasswordEncoder());
+    }
 
     @BeforeEach
     public void deleteAllAndCreateOneUser() {
@@ -68,7 +78,7 @@ class UserControllerIntegrationTests extends BasicTest {
         userProfileDTO.setName("New name");
         userProfileDTO.setBio("New bio");
 
-        webTestClient.put().uri("/users")
+        webTestClient.put().uri("/users/profile")
                 .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper().writeValueAsString(userProfileDTO))
@@ -85,6 +95,44 @@ class UserControllerIntegrationTests extends BasicTest {
         assertEquals(addedUser.getProfile().getName(), userProfileDTO.getName(), "Name must be equals");
 
         assertEquals(addedUser.getProfile().getBio(), userProfileDTO.getBio(), "Bio must be equals");
+    }
+
+    @Test
+    void updateUserAuthentication() throws Exception {
+        assertEquals(1, userRepository.count(), "Must be 1");
+
+        assertEquals(UserUtils.prepareUsername(userToBeAdd.getUsername()), addedUser.getAuthentication().getUsername(),
+                "Username must be equals");
+
+        assertTrue(BCrypt.checkpw(userToBeAdd.getPassword(), addedUser.getAuthentication().getPassword()),
+                "Password must be equals");
+
+        UserAuthenticationDTO userPasswordDto = new UserAuthenticationDTO();
+        userPasswordDto.setUsername("New User");
+        userPasswordDto.setPassword("654321");
+        userPasswordDto.setPasswordConfirm("654321");
+
+        webTestClient.put().uri("/users/password")
+                .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(new ObjectMapper().writeValueAsString(userPasswordDto))
+                .exchange()
+                .expectStatus().isOk();
+
+        //Updates the user
+        addedUser = userRepository.findByUuid(addedUser.getUuid()).get();
+
+        assertNotEquals(UserUtils.prepareUsername(userToBeAdd.getUsername()), addedUser.getAuthentication().getUsername(),
+                "Username must not be equals");
+
+        assertFalse(BCrypt.checkpw(userToBeAdd.getPassword(), addedUser.getAuthentication().getPassword()),
+                "Password must not be equals");
+
+        assertEquals(UserUtils.prepareUsername(userPasswordDto.getUsername()), addedUser.getAuthentication().getUsername(),
+                "Username must be equals");
+
+        assertTrue(BCrypt.checkpw(userPasswordDto.getPassword(), addedUser.getAuthentication().getPassword()),
+                "Password must be equals");
     }
 
     @Test

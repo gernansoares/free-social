@@ -4,16 +4,19 @@ import com.freesocial.users.common.util.UserUtils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class UserAuthentication {
 
     @Id
     @GeneratedValue
+    @EqualsAndHashCode.Include
     private Long id;
 
     @NotNull
@@ -32,9 +35,8 @@ public class UserAuthentication {
     private String passwordConfirm;
 
     UserAuthentication(String username, String password, String passwordConfirm, FreeSocialUser user) {
-        UserUtils userUtils = new UserUtils();
-        this.username = userUtils.prepareUsername(username);
-        this.password = userUtils.encodePassword(password);
+        this.username = UserUtils.prepareUsername(username);
+        this.password = UserUtils.encodePassword(password);
         this.passwordConfirm = passwordConfirm;
         this.user = user;
     }

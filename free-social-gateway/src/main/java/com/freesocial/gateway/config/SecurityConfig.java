@@ -40,9 +40,4 @@ public class SecurityConfig extends DefaultSecurityConfig {
         return http.build();
     }
 
-    @Bean
-    public BCryptPasswordEncoder getEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
 }

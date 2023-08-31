@@ -1,5 +1,6 @@
 package com.freesocial.users.common.util;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -7,17 +8,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserUtils {
 
-    @Bean
-    private BCryptPasswordEncoder getEncoder() {
-        return new BCryptPasswordEncoder();
+    private static BCryptPasswordEncoder staticEncoder;
+
+    @Autowired
+    public void setEncoder(BCryptPasswordEncoder encoder) {
+        staticEncoder = encoder;
     }
 
-    public String prepareUsername(String username) {
+    public static String prepareUsername(String username) {
         return username.toLowerCase().replaceAll(" ", "");
     }
 
-    public String encodePassword(String password) {
-        return getEncoder().encode(password);
+    public static String encodePassword(String password) {
+        return staticEncoder.encode(password);
     }
 
 }

@@ -12,17 +12,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = FreeSocialUsersApplication.class)
 @AutoConfigureWebTestClient
@@ -66,7 +63,7 @@ class NewUserControllerIntegrationTests extends BasicTest {
         assertEquals(0, userRepository.count(), "Must be 0");
 
         assertFalse(userAuthenticationRepository
-                        .getByUsernameIgnoreCase(userUtils.prepareUsername(userToBeAdd.getUsername()))
+                        .findByUsernameIgnoreCase(userUtils.prepareUsername(userToBeAdd.getUsername()))
                         .isPresent(),
                 "User must not exists");
     }
@@ -92,7 +89,7 @@ class NewUserControllerIntegrationTests extends BasicTest {
 
         assertEquals(1, userRepository.count(), "Must be 1");
 
-        assertNotNull(userAuthenticationRepository.getByUsernameIgnoreCase(
+        assertNotNull(userAuthenticationRepository.findByUsernameIgnoreCase(
                 userUtils.prepareUsername(userToBeAdd.getUsername())), "User must exists");
     }
 
