@@ -9,8 +9,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 /**
- * Defines the configuration for securing internal and external API access
- * All values in AvailableRoutes will be added, access level will be defined by privateRoute field
+ * Defines the configuration for securing internal API access
  */
 @Configuration
 @Profile("!" + Profiles.TESTS_NO_SECURITY)

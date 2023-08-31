@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import reactor.core.publisher.Hooks;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
 @EnableWebFlux
 @ComponentScan("com.freesocial")
 public class FreeSocialUsersApplication {

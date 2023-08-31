@@ -1,4 +1,4 @@
-package com.freesocial.security;
+package com.freesocial.posts;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,13 +7,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import reactor.core.publisher.Hooks;
 
-@SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
+@SpringBootApplication
 @EnableWebFlux
 @ComponentScan("com.freesocial")
-public class FreeSocialSecurityApplication {
+public class FreeSocialPostsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FreeSocialSecurityApplication.class, args);
+        SpringApplication.run(FreeSocialPostsApplication.class, args);
         Hooks.enableAutomaticContextPropagation();
     }
 
