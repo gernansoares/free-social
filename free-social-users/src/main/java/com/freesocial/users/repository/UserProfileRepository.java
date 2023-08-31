@@ -16,8 +16,8 @@ public interface UserProfileRepository extends JpaRepository<UserProfile, Long> 
 
     @Modifying
     @Query(nativeQuery = true,
-            value = "UPDATE user_profile u SET u.name = :name, u.bio = :bio " +
-                    "WHERE u.user_id = (SELECT id FROM free_social_user WHERE uuid = :userUuid)")
+            value = "UPDATE user_profile SET name = :name, bio = :bio " +
+                    "WHERE user_id = (SELECT id FROM free_social_user WHERE uuid = :userUuid)")
     void updateNameAndBioByUserUuid(@Param("name") String name,
                                     @Param("bio") String bio,
                                     @Param("userUuid") String userUuid);

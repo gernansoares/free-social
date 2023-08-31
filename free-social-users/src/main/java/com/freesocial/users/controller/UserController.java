@@ -43,7 +43,7 @@ public class UserController {
         log.info(String.format("User with UUID %s profile updated successfully", uuid));
     }
 
-    @PutMapping("/password")
+    @PutMapping("/authentication")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Update user's username and password, UUID identifies the user")
     @ApiResponses(value = {
