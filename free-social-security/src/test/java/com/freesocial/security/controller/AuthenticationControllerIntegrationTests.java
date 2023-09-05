@@ -1,4 +1,4 @@
-package com.freesocial.security.integration;
+package com.freesocial.security.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.freesocial.lib.config.tests.BasicTest;

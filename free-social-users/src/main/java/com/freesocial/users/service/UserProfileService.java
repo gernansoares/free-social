@@ -22,15 +22,18 @@ public class UserProfileService {
     /**
      * Update user's profile
      *
-     * @param profile      new profile information
-     * @param userUuid identifies the user
+     * @param newProfile new profile information
+     * @param userUuid   identifies the user
      * @throws UserNotFoundException if user is not found
      */
-    public void update(UserProfileDTO profile, String userUuid) {
+    public void update(UserProfileDTO newProfile, String userUuid) {
         Optional<UserProfile> optUser = userProfileRepository.findByUser_Uuid(userUuid);
-        optUser.orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
+        UserProfile profile = optUser.orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
 
-        userProfileRepository.updateNameAndBioByUserUuid(profile.getName(), profile.getBio(), userUuid);
+        profile.setName(newProfile.getName());
+        profile.setBio(newProfile.getBio());
+
+        userProfileRepository.save(profile);
     }
 
 }

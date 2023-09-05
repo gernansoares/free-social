@@ -44,7 +44,7 @@ public class UserInfo {
     }
 
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 
     @JsonIgnore

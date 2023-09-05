@@ -12,3 +12,7 @@ spring:
     max-pool-size: 250
     idle-timeout: 300000
     minIdle: 5
+
+freesocial:
+  posts:
+    filesdir: "D:/freesocial/tests/posts/files/%s.%s"

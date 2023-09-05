@@ -31,22 +31,22 @@ public class UserService {
      * Creates a new user
      *
      * @param user to be saved
-     * @return the recently add user with its own ID and UUID
+     * @return the recently added user with its own ID and UUID
      */
-    public Mono<FreeSocialUser> create(FreeSocialUser user) {
+    public FreeSocialUser create(FreeSocialUser user) {
         userAuthenticationService.validateNewUser(user.getAuthentication());
-        return Mono.just(userRepository.save(user));
+        return userRepository.save(user);
     }
 
     /**
-     * Deleter a user using its UUID
+     * Deletes a user using its UUID
+     * Sends a message (by Kafka) to security service to remove all deleted user's tokens
      *
      * @param user to be deleted UUID
      */
     public void delete(String uuid) {
         Optional<FreeSocialUser> user = userRepository.findByUuid(uuid);
-        user.orElseThrow(() -> new IllegalArgumentException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
-        userRepository.delete(user.get());
+        userRepository.delete(user.orElseThrow(() -> new IllegalArgumentException(ErroUtil.getMessage(Constants.USER_NOT_FOUND))));
         kafkaTemplate.send(KafkaTopicConfig.DELETE_ALL_TOKENS_TOPIC, uuid);
     }
 

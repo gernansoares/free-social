@@ -10,7 +10,6 @@ import com.freesocial.users.entity.UserAuthentication;
 import com.freesocial.users.repository.UserAuthenticationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,9 +22,6 @@ public class UserAuthenticationService {
     @Autowired
     private UserAuthenticationRepository userAuthenticationRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder encoder;
-
     /**
      * Check if passwords match
      *
@@ -33,7 +29,7 @@ public class UserAuthenticationService {
      * @param passwordConfirm not encoded password confirmation
      * @throws IllegalArgumentException if passwords does not match
      */
-    private void checkPasswordAndConfirmationMatch(String hashedPassword, String passwordConfirm) {
+    private void validatePasswordAndConfirmationMatch(String hashedPassword, String passwordConfirm) {
         if (!BCrypt.checkpw(passwordConfirm, hashedPassword)) {
             throw new IllegalArgumentException(ErroUtil.getMessage(Constants.PASSWORD_CONFIRMATION_NOT_MATCH));
         }
@@ -46,7 +42,7 @@ public class UserAuthenticationService {
      * @throws UsernameAlreadyExistsException if username exists already
      */
     public void validateNewUser(UserAuthentication userAuthentication) {
-        checkPasswordAndConfirmationMatch(userAuthentication.getPassword(), userAuthentication.getPasswordConfirm());
+        validatePasswordAndConfirmationMatch(userAuthentication.getPassword(), userAuthentication.getPasswordConfirm());
 
         userAuthenticationRepository.findByUsernameIgnoreCase(userAuthentication.getUsername())
                 .ifPresent((p) -> {
@@ -55,7 +51,8 @@ public class UserAuthenticationService {
     }
 
     /**
-     * Check for user existence and username usage
+     * Validate if a username change is valid by checking if actual username is not in use
+     * or belongs to the user in which is updating
      *
      * @param username new username
      * @param userUuid identifies the user
@@ -63,13 +60,9 @@ public class UserAuthenticationService {
      * @throws UsernameAlreadyExistsException if username already exists and does not belong
      *                                        to the same user which is updating
      */
-    private void checkForValidUserAndUsername(String username, String userUuid) {
-        Optional<UserAuthentication> optUserAuthentication = userAuthenticationRepository.findByUser_Uuid(userUuid);
-        UserAuthentication userAuthentication = optUserAuthentication
-                .orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
-
-        Optional<UserAuthentication> otherUserAuthentication = userAuthenticationRepository.findByUsernameIgnoreCase(username);
-        otherUserAuthentication.ifPresent((other) -> {
+    private void validateUsernameChange(String oldUsername, String newUserName) {
+        Optional<UserAuthentication> otherUserAuthentication = userAuthenticationRepository.findByUsernameIgnoreCase(newUserName);
+        otherUserAuthentication.filter(other -> !other.getUsername().equals(oldUsername)).ifPresent((other) -> {
             throw new UsernameAlreadyExistsException(ErroUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE));
         });
     }
@@ -77,18 +70,23 @@ public class UserAuthenticationService {
     /**
      * Update user's authentication info (aka username/password)
      *
-     * @param authentication new authentication information
-     * @param userUuid       identifies the user
+     * @param authenticationDto new authentication information
+     * @param userUuid          identifies the user
      */
-    public void update(UserAuthenticationDTO authentication, String userUuid) {
-        //Prepares username and password according to rules
-        String username = UserUtils.prepareUsername(authentication.getUsername());
-        String password = UserUtils.encodePassword(authentication.getPassword());
+    public void update(UserAuthenticationDTO authenticationDto, String userUuid) {
+        String username = UserUtils.prepareUsername(authenticationDto.getUsername());
+        String password = UserUtils.encodePassword(authenticationDto.getPassword());
 
-        checkPasswordAndConfirmationMatch(password, authentication.getPasswordConfirm());
-        checkForValidUserAndUsername(username, userUuid);
+        Optional<UserAuthentication> optUserAuthentication = userAuthenticationRepository.findByUser_Uuid(userUuid);
+        UserAuthentication userAuthentication = optUserAuthentication
+                .orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
 
-        userAuthenticationRepository.updateUsernameAndPasswordByUserUuid(username, password, userUuid);
+        validatePasswordAndConfirmationMatch(password, authenticationDto.getPasswordConfirm());
+        validateUsernameChange(userAuthentication.getUsername(), username);
+
+        userAuthentication.setUsername(username);
+        userAuthentication.setPassword(password);
+        userAuthenticationRepository.save(userAuthentication);
     }
 
 }

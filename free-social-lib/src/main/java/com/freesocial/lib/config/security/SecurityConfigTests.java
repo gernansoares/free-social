@@ -1,6 +1,6 @@
 package com.freesocial.lib.config.security;
 
-import com.freesocial.lib.config.util.Profiles;
+import com.freesocial.lib.common.util.Profiles;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

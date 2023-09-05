@@ -36,11 +36,11 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Profile updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void updateProfile(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid,
+    public void updateProfile(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
                               @RequestBody @Valid UserProfileDTO profileDto) {
-        log.info(String.format("Updating user with UUID %s profile", uuid));
-        userProfileService.update(profileDto, uuid);
-        log.info(String.format("User with UUID %s profile updated successfully", uuid));
+        log.info(String.format("Updating user with UUID %s profile", userUuid));
+        userProfileService.update(profileDto, userUuid);
+        log.info(String.format("User with UUID %s profile updated successfully", userUuid));
     }
 
     @PutMapping("/authentication")
@@ -50,24 +50,24 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Password updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void updateAuthentication(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid,
-                               @RequestBody @Valid UserAuthenticationDTO passwordDto) {
-        log.info(String.format("Updating user with UUID %s password", uuid));
-        userAuthenticationService.update(passwordDto, uuid);
-        log.info(String.format("User with UUID %s password updated successfully", uuid));
+    public void updateAuthentication(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
+                                     @RequestBody @Valid UserAuthenticationDTO authenticationDto) {
+        log.info(String.format("Updating user with UUID %s authentication", userUuid));
+        userAuthenticationService.update(authenticationDto, userUuid);
+        log.info(String.format("User with UUID %s authentication updated successfully", userUuid));
     }
 
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
-    @Operation(summary = "Delete user and its dependencies, UUID identifies the user")
+    @Operation(summary = "Delete a user and its dependencies, UUID identifies the user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User deleted"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void delete(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String uuid) {
-        log.info(String.format("Deleting user with UUID %s", uuid));
-        userService.delete(uuid);
-        log.info(String.format("User with UUID %s deleted successfully", uuid));
+    public void delete(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid) {
+        log.info(String.format("Deleting user with UUID %s", userUuid));
+        userService.delete(userUuid);
+        log.info(String.format("User with UUID %s deleted successfully", userUuid));
     }
 
 }

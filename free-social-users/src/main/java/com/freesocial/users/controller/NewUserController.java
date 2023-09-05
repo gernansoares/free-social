@@ -29,10 +29,11 @@ public class NewUserController {
             @ApiResponse(responseCode = "201", description = "Created user"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public Mono<UserDTO> createUser(@RequestBody @Valid UserSignUpDTO userDto) {
-        log.info(String.format("Adding user %s", userDto.getName()));
-        FreeSocialUser user = userService.create(FreeSocialUser.of(userDto)).block();
-        log.info(String.format("User %s added successfully with UUID %s", userDto.getName(), user.getUuid()));
+    public Mono<UserDTO> create(@RequestBody @Valid UserSignUpDTO userDto) {
+        FreeSocialUser user = FreeSocialUser.of(userDto);
+        log.info(String.format("Adding user %s with UUID", userDto.getUsername(), user.getUuid()));
+        user = userService.create(FreeSocialUser.of(userDto));
+        log.info(String.format("User %s added successfully with UUID %s", userDto.getUsername(), user.getUuid()));
         return Mono.just(UserDTO.of(user));
     }
 

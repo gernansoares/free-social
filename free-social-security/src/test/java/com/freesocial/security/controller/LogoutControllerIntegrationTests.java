@@ -1,4 +1,4 @@
-package com.freesocial.security.integration;
+package com.freesocial.security.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

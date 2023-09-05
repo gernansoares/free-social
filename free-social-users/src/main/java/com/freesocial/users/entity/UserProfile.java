@@ -15,9 +15,11 @@ public class UserProfile {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Setter
     @NotNull
     private String name;
 
+    @Setter
     @Column(columnDefinition = "TEXT")
     private String bio;
 

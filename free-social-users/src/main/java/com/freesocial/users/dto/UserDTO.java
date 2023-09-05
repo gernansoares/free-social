@@ -1,9 +1,10 @@
 package com.freesocial.users.dto;
 
 import com.freesocial.users.entity.FreeSocialUser;
+import lombok.Data;
 import lombok.Getter;
 
-@Getter
+@Data
 public class UserDTO {
 
     private String name;

@@ -9,6 +9,7 @@ import com.freesocial.users.dto.UserSignUpDTO;
 import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.entity.UserAuthentication;
 import com.freesocial.users.repository.UserAuthenticationRepository;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +17,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Optional;
 
@@ -33,6 +35,11 @@ class UserAuthenticationServiceTests extends BasicTest {
 
     @InjectMocks
     private UserAuthenticationService userAuthenticationService;
+
+    @BeforeAll
+    static void setup() {
+        new UserUtils().setEncoder(new BCryptPasswordEncoder());
+    }
 
     @Test
     void validateNewUserWithIncorrectPasswords() {
@@ -104,6 +111,9 @@ class UserAuthenticationServiceTests extends BasicTest {
         authentication.setPassword("123456");
         authentication.setPasswordConfirm("");
 
+        //Username will not exists
+        when(userAuthenticationRepository.findByUser_Uuid(any())).thenReturn(Optional.of(new UserAuthentication()));
+
         assertThrows(IllegalArgumentException.class, () -> {
             userAuthenticationService.update(authentication, "");
         }, "User password and confirmation are not the same");
@@ -127,25 +137,31 @@ class UserAuthenticationServiceTests extends BasicTest {
 
     @Test
     void validateUpdateAuthenticationWithAlreadyExistingUsername() {
-        UserAuthenticationDTO authentication = new UserAuthenticationDTO();
-        authentication.setUsername("New user");
-        authentication.setPassword("123456");
-        authentication.setPasswordConfirm(authentication.getPassword());
+        UserAuthenticationDTO authenticationDto = new UserAuthenticationDTO();
+        authenticationDto.setUsername("New user");
+        authenticationDto.setPassword("123456");
+        authenticationDto.setPasswordConfirm(authenticationDto.getPassword());
+
+        UserAuthentication conflictingAuth = new UserAuthentication();
+        conflictingAuth.setUsername(UserUtils.prepareUsername(authenticationDto.getUsername()));
+
+        UserAuthentication updatingAuth = new UserAuthentication();
+        updatingAuth.setUsername(UserUtils.prepareUsername("old user name"));
 
         //User must exists
         when(userAuthenticationRepository.findByUser_Uuid(any()))
-                .thenReturn(Optional.of(new UserAuthentication()));
+                .thenReturn(Optional.of(updatingAuth));
 
         //Username will exists in first attempt, then will not exist anymore
         when(userAuthenticationRepository.findByUsernameIgnoreCase(Mockito.any()))
-                .thenReturn(Optional.of(new UserAuthentication()))
-                .thenReturn(Optional.empty());
+                .thenReturn(Optional.of(conflictingAuth))
+                .thenReturn(Optional.of(updatingAuth));
 
         assertThrows(UsernameAlreadyExistsException.class, () -> {
-            userAuthenticationService.update(authentication, any());
+            userAuthenticationService.update(authenticationDto, any());
         }, "Username must be in use");
 
-        assertDoesNotThrow(() -> userAuthenticationService.update(authentication, ""),
+        assertDoesNotThrow(() -> userAuthenticationService.update(authenticationDto, any()),
                 "Username does not exists, everything is ok");
     }
 
@@ -166,9 +182,7 @@ class UserAuthenticationServiceTests extends BasicTest {
         when(userAuthenticationRepository.findByUsernameIgnoreCase(Mockito.any()))
                 .thenReturn(Optional.empty());
 
-        doNothing().when(userAuthenticationRepository).updateUsernameAndPasswordByUserUuid(
-                eq(UserUtils.prepareUsername(authentication.getUsername())),
-                any(String.class), eq(uuid));
+        when(userAuthenticationRepository.save(Mockito.any())).thenReturn(new UserAuthentication());
 
         assertDoesNotThrow(() -> userAuthenticationService.update(authentication, uuid),
                 "User exists, passwords matches and username is available");

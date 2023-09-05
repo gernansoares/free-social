@@ -2,12 +2,11 @@ package com.freesocial.gateway.config;
 
 import com.freesocial.gateway.common.enums.AvailableRoutes;
 import com.freesocial.lib.config.security.DefaultSecurityConfig;
-import com.freesocial.lib.config.util.Profiles;
+import com.freesocial.lib.common.util.Profiles;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 /**

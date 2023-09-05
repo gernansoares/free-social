@@ -1,4 +1,4 @@
-package com.freesocial.lib.config.util;
+package com.freesocial.lib.common.util;
 
 public class Profiles {
 

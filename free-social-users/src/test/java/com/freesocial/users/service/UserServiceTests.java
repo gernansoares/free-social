@@ -46,13 +46,10 @@ class UserServiceTests extends BasicTest {
         //Will return the same object on save
         when(userRepository.save(Mockito.any(FreeSocialUser.class))).thenReturn(usedToBeAdd);
 
-        //Will return empty on search
-        when(userRepository.findByUuid(usedToBeAdd.getUuid())).thenReturn(Optional.empty());
-
         //Will ignore validation
         doNothing().when(userAuthenticationService).validateNewUser(Mockito.any(UserAuthentication.class));
 
-        FreeSocialUser testUser = userService.create(usedToBeAdd).block();
+        FreeSocialUser testUser = userService.create(usedToBeAdd);
 
         assertNotNull(testUser, "User must exists");
 
@@ -66,10 +63,6 @@ class UserServiceTests extends BasicTest {
         assertEquals(userUtils.prepareUsername(userDto.getUsername()),
                 testUser.getAuthentication().getUsername(),
                 "Username must be equals to prepared DTO username");
-
-        Optional<FreeSocialUser> userOptional = userRepository.findByUuid(testUser.getUuid());
-
-        assertFalse(userOptional.isPresent(), "User not must exists");
 
     }
 

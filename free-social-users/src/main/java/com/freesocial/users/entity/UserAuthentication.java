@@ -3,10 +3,7 @@ package com.freesocial.users.entity;
 import com.freesocial.users.common.util.UserUtils;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AccessLevel;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -19,10 +16,12 @@ public class UserAuthentication {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @Setter
     @NotNull
     @Column(unique = true)
     private String username;
 
+    @Setter
     @NotNull
     private String password;
 

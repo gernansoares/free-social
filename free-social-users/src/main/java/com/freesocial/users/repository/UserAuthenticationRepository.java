@@ -17,12 +17,4 @@ public interface UserAuthenticationRepository extends JpaRepository<UserAuthenti
 
     Optional<UserAuthentication> findByUser_Uuid(String uuid);
 
-    @Modifying
-    @Query(nativeQuery = true,
-            value = "UPDATE user_authentication SET username = :username, password = :password " +
-                    "WHERE user_id = (SELECT id FROM free_social_user WHERE uuid = :userUuid)")
-    void updateUsernameAndPasswordByUserUuid(@Param("username") String username,
-                                             @Param("password") String password,
-                                             @Param("userUuid") String userUuid);
-
 }

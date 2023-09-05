@@ -1,4 +1,4 @@
-package com.freesocial.lib.config.reactive;
+package com.freesocial.lib.config.security;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
