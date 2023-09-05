@@ -38,6 +38,7 @@ You can see all supported endpoints in AvaiableRoutes enum at gateway project, b
 * **/logout/logout** - For logout
 * **/newuser** - Creates user
 * **/users** - Update and delete user
+* **/posts** - Posts CRUD
 
 ## Extra information
 
