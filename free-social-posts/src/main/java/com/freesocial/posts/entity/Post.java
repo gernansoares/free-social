@@ -7,8 +7,6 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.http.codec.multipart.FilePart;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.UUID;
 
@@ -39,12 +37,20 @@ public class Post {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private PostContent content;
 
+    @NotNull
+    @OneToOne(mappedBy = "post", fetch = FetchType.LAZY,
+            cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    private PostLikes likes;
+
     public static Post create(PostDTO dto, String userUuid) {
         Post post = new Post();
         PostContent postContent = new PostContent(dto.getText(), post);
+        PostLikes postLikes = new PostLikes(post);
+
         post.userUuid = userUuid;
         post.postUuid = UUID.randomUUID().toString();
         post.content = postContent;
+        post.likes = postLikes;
         post.enabled = true;
         return post;
     }

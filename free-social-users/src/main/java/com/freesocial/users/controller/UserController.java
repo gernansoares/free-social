@@ -31,7 +31,7 @@ public class UserController {
 
     @PutMapping("/profile")
     @ResponseStatus(code = HttpStatus.OK)
-    @Operation(summary = "Update user's profile, UUID identifies the user")
+    @Operation(summary = "Update user's profile")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
@@ -45,7 +45,7 @@ public class UserController {
 
     @PutMapping("/authentication")
     @ResponseStatus(code = HttpStatus.OK)
-    @Operation(summary = "Update user's username and password, UUID identifies the user")
+    @Operation(summary = "Update user's username and password")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
@@ -59,7 +59,7 @@ public class UserController {
 
     @DeleteMapping
     @ResponseStatus(code = HttpStatus.OK)
-    @Operation(summary = "Delete a user and its dependencies, UUID identifies the user")
+    @Operation(summary = "Delete a user and its dependencies")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User deleted"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),

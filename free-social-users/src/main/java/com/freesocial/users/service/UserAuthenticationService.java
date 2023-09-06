@@ -54,8 +54,8 @@ public class UserAuthenticationService {
      * Validate if a username change is valid by checking if actual username is not in use
      * or belongs to the user in which is updating
      *
-     * @param username new username
-     * @param userUuid identifies the user
+     * @param oldUsername old username
+     * @param newUserName new username
      * @throws UserNotFoundException          if user is not found
      * @throws UsernameAlreadyExistsException if username already exists and does not belong
      *                                        to the same user which is updating

@@ -4,6 +4,7 @@ import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.posts.dto.PostDTO;
 import com.freesocial.posts.entity.Post;
 import com.freesocial.posts.service.PostContentService;
+import com.freesocial.posts.service.PostLikesService;
 import com.freesocial.posts.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.multipart.FilePart;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -25,11 +27,14 @@ public class PostController {
     private PostService postService;
 
     @Autowired
+    private PostLikesService postLikesService;
+
+    @Autowired
     private PostContentService postContentService;
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    @Operation(summary = "Creates a new post, UUID identifies the user")
+    @Operation(summary = "Creates a new post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Post created"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
@@ -44,6 +49,24 @@ public class PostController {
         return Mono.just(post.getPostUuid());
     }
 
+    @PatchMapping("{postUuid}")
+    @ResponseStatus(code = HttpStatus.OK)
+    @Operation(summary = "Creates likes or remove like of a post")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Post created"),
+            @ApiResponse(responseCode = "400", description = "Invalid information"),
+    })
+    public void like(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
+                     @PathVariable String postUuid) {
+        try {
+            log.info(String.format("User with UUID %s liking post with UUID %s", postUuid, userUuid));
+            postLikesService.like(postUuid, userUuid);
+            log.info(String.format("User with UUID %s liked post with UUID %s successfully", postUuid, userUuid));
+        } catch (ObjectOptimisticLockingFailureException e) {
+            like(postUuid, userUuid);
+        }
+    }
+
     @PutMapping("{postUuid}")
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Update a post's")
@@ -52,8 +75,8 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
     public void update(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
-                              @PathVariable String postUuid,
-                              @RequestBody @Valid PostDTO profileDto) {
+                       @PathVariable String postUuid,
+                       @RequestBody @Valid PostDTO profileDto) {
         log.info(String.format("Updating post with UUID %s by user with UUID %s", postUuid, userUuid));
         postContentService.update(profileDto, postUuid, userUuid);
         log.info(String.format("Post with UUID %s has updated successfully by user with UUID %s", postUuid, userUuid));
@@ -61,7 +84,7 @@ public class PostController {
 
     @DeleteMapping("{postUuid}")
     @ResponseStatus(code = HttpStatus.OK)
-    @Operation(summary = "Delete user and its dependencies, UUID identifies the user")
+    @Operation(summary = "Delete user and its dependencies")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User deleted"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
