@@ -1,10 +1,11 @@
 package com.freesocial.posts.service;
 
 import com.freesocial.lib.config.exceptions.FileUploadException;
-import com.freesocial.lib.config.exceptions.UserNotFoundException;
 import com.freesocial.lib.properties.ErroUtil;
 import com.freesocial.posts.common.enums.ValidExtensions;
+import com.freesocial.posts.common.exceptions.PostNotFoundException;
 import com.freesocial.posts.common.util.Constants;
+import com.freesocial.posts.common.util.PostUtil;
 import com.freesocial.posts.dto.PostDTO;
 import com.freesocial.posts.entity.Post;
 import com.freesocial.posts.entity.PostContent;
@@ -33,7 +34,7 @@ public class PostContentService {
     private PostContentRepository postContentRepository;
 
     @Autowired
-    private PostService postService;
+    private PostUtil postUtil;
 
     @Value("${freesocial.posts.filesdir}")
     private String filesDir;
@@ -97,13 +98,13 @@ public class PostContentService {
      * @param contentDto new post information
      * @param postUuid   identifies the post
      * @param userUuid   identifies the user
-     * @throws UserNotFoundException if user is not found
+     * @throws PostNotFoundException if user is not found
      */
     public void update(PostDTO contentDto, String postUuid, String userUuid) {
         Optional<PostContent> postOpt = postContentRepository.findByPost_PostUuid(postUuid);
-        PostContent postContent = postOpt.orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.POST_NOT_FOUND)));
+        PostContent postContent = postOpt.orElseThrow(() -> new PostNotFoundException());
 
-        postService.validatePostBelongsToUser(postContent.getPost(), userUuid);
+        postUtil.validatePostBelongsToUser(postContent.getPost(), userUuid);
         validatePostContent(postContent.getPost());
 
         postContent.setText(contentDto.getText());

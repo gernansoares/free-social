@@ -3,7 +3,6 @@ package com.freesocial.posts.controller;
 import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.posts.dto.PostDTO;
 import com.freesocial.posts.entity.Post;
-import com.freesocial.posts.entity.PostContent;
 import com.freesocial.posts.service.PostContentService;
 import com.freesocial.posts.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,14 +12,9 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/posts")
@@ -43,7 +37,7 @@ public class PostController {
     public Mono<String> create(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
                                @RequestPart @Valid PostDTO newPost,
                                @RequestPart(required = false) FilePart upload) {
-        Post post = Post.of(newPost, userUuid);
+        Post post = Post.create(newPost, userUuid);
         log.info(String.format("User with UUID %s adding post with UUID %s", post.getUserUuid(), post.getPostUuid()));
         postService.create(post, upload);
         log.info(String.format("User with UUID %s added post with UUID %s successfully", post.getUserUuid(), post.getPostUuid()));
@@ -57,7 +51,7 @@ public class PostController {
             @ApiResponse(responseCode = "200", description = "Profile updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void updateProfile(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
+    public void update(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
                               @PathVariable String postUuid,
                               @RequestBody @Valid PostDTO profileDto) {
         log.info(String.format("Updating post with UUID %s by user with UUID %s", postUuid, userUuid));

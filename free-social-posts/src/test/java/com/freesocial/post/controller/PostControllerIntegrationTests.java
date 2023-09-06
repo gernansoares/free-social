@@ -20,7 +20,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -53,7 +52,7 @@ class PostControllerIntegrationTests extends BasicTest {
         postToBeAdd = new PostDTO();
         postToBeAdd.setText("Today I'm feeling happy");
 
-        addedPost = postService.create(Post.of(postToBeAdd, "uuid"), null);
+        addedPost = postService.create(Post.create(postToBeAdd, "uuid"), null);
     }
 
     @AfterEach
@@ -100,7 +99,7 @@ class PostControllerIntegrationTests extends BasicTest {
 
         assertTrue(resource.getFile().exists(), "File must exists in disk");
 
-        assertEquals(1, postRepository.count(), "Must be 2, the first post is created automatically");
+        assertEquals(2, postRepository.count(), "Must be 2, the first post is created automatically");
 
         assertEquals(postRepository.findAll().get(0).getContent().getText(), postToBeAdd.getText(),
                 "DTO text and new post in database text must be equals");

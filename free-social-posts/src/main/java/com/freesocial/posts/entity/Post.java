@@ -39,7 +39,7 @@ public class Post {
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private PostContent content;
 
-    public static Post of(PostDTO dto, String userUuid) {
+    public static Post create(PostDTO dto, String userUuid) {
         Post post = new Post();
         PostContent postContent = new PostContent(dto.getText(), post);
         post.userUuid = userUuid;

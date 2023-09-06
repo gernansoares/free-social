@@ -4,6 +4,7 @@ import com.freesocial.lib.config.exceptions.FileUploadException;
 import com.freesocial.lib.properties.ErroUtil;
 import com.freesocial.posts.common.enums.ValidExtensions;
 import com.freesocial.posts.common.util.Constants;
+import com.freesocial.posts.common.util.PostUtil;
 import com.freesocial.posts.entity.Post;
 import com.freesocial.posts.repository.PostContentRepository;
 import com.freesocial.posts.repository.PostRepository;
@@ -32,19 +33,7 @@ public class PostService {
     private PostContentService postContentService;
 
     @Autowired
-    private PostService postService;
-
-    /**
-     * Validate if a solicited object UUID owner is equals to the active user UUID
-     *
-     * @param post     post being validated
-     * @param userUuid active user UUID
-     */
-    public void validatePostBelongsToUser(Post post, String userUuid) {
-        if (!post.getUserUuid().equals(userUuid)) {
-            throw new IllegalArgumentException(ErroUtil.getMessage(Constants.INVALID_POST));
-        }
-    }
+    private PostUtil postUtil;
 
     /**
      * Creates a new post, saves the uploaded file if its exists
@@ -56,6 +45,7 @@ public class PostService {
     public Post create(Post post, FilePart file) {
         postContentService.validatePostContent(post);
         postContentService.saveFile(post.getContent(), file);
+
         return postRepository.save(post);
     }
 
@@ -70,7 +60,8 @@ public class PostService {
         Optional<Post> postOpt = postRepository.findByPostUuid(postUuid);
         Post post = postOpt.orElseThrow(() -> new IllegalArgumentException(ErroUtil.getMessage(Constants.POST_NOT_FOUND)));
 
-        validatePostBelongsToUser(post, userUuid);
+        postUtil.validatePostBelongsToUser(post, userUuid);
+
         postContentService.deleteFile(post.getContent());
         postRepository.delete(post);
     }

@@ -12,10 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest(classes = FreeSocialPostsApplication.class)
@@ -31,7 +29,7 @@ class PostServiceTests extends BasicTest {
     void createPostWithoutTextOrFile() {
         PostDTO postDto = new PostDTO();
 
-        Post testPost = Post.of(postDto, "uuid");
+        Post testPost = Post.create(postDto, "uuid");
 
         //Will return the same object on save
         when(postRepository.save(Mockito.any(Post.class))).thenReturn(testPost);
@@ -47,7 +45,7 @@ class PostServiceTests extends BasicTest {
         PostDTO postDto = new PostDTO();
         postDto.setText("New post");
 
-        Post testPost = Post.of(postDto, "uuid");
+        Post testPost = Post.create(postDto, "uuid");
 
         //Will return the same object on save
         when(postRepository.save(Mockito.any(Post.class))).thenReturn(testPost);

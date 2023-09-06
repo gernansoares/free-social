@@ -2,10 +2,7 @@ package com.freesocial.users.service;
 
 import com.freesocial.lib.config.exceptions.UserNotFoundException;
 import com.freesocial.lib.config.tests.BasicTest;
-import com.freesocial.users.dto.UserAuthenticationDTO;
 import com.freesocial.users.dto.UserProfileDTO;
-import com.freesocial.users.dto.UserSignUpDTO;
-import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.entity.UserProfile;
 import com.freesocial.users.repository.UserProfileRepository;
 import org.junit.jupiter.api.Test;
