@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
+import java.util.Locale;
 import java.util.ResourceBundle;
 
 /**
@@ -22,6 +23,7 @@ public class ErrorUtil {
     public MessageSource errorsSource() {
         ReloadableResourceBundleMessageSource errosSource = new ReloadableResourceBundleMessageSource();
         errosSource.setBasename("classpath:" + FILE);
+        errosSource.setDefaultEncoding("UTF-8");
         return errosSource;
     }
 
@@ -50,7 +52,7 @@ public class ErrorUtil {
     /**
      * Reads a property value with parameters
      *
-     * @param message the property to be read
+     * @param message    the property to be read
      * @param parameters the parameters which will be replaced in the message, in order
      * @return the message associated with the property with all parameters replaced
      */

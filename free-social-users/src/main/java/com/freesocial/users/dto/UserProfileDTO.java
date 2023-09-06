@@ -1,12 +1,8 @@
 package com.freesocial.users.dto;
 
-import com.freesocial.users.validation.BioValidation;
-import com.freesocial.users.validation.NameValidation;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.freesocial.users.common.validation.BioValidation;
+import com.freesocial.users.common.validation.NameValidation;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class UserProfileDTO {

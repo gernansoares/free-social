@@ -1,4 +1,4 @@
-package com.freesocial.users.validation;
+package com.freesocial.users.common.validation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -11,7 +11,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PasswordValidator.class)
 public @interface PasswordValidation {
 
-    public String message() default "Invalid password";
+    public String message() default "{invalid.password}";
 
     public Class<?>[] groups() default {};
 

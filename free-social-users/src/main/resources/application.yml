@@ -14,9 +14,6 @@ server:
       min-spare: 50
       max: 300
 
-  error:
-    include-message: always
-
 spring:
   application:
     name: free-social-users

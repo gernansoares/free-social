@@ -1,31 +1,27 @@
 package com.freesocial.users.dto;
 
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import com.freesocial.users.common.validation.BioValidation;
+import com.freesocial.users.common.validation.NameValidation;
+import com.freesocial.users.common.validation.PasswordValidation;
+import com.freesocial.users.common.validation.UsernameValidation;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 @Data
 public class UserSignUpDTO {
 
-    @NotNull
-    @Size(min = 1, max = 255, message = "{invalid.name}")
+    @NameValidation
     private String name;
 
-    @Size(min = 0, max = 500, message = "{invalid.bio}")
+    @BioValidation
     private String bio;
 
-    @NotNull
-    @Size(min = 5, max = 20, message = "{invalid.username}")
+    @UsernameValidation
     private String username;
 
-    @NotNull
-    @Size(min = 6, max = 12, message = "{invalid.password}")
+    @PasswordValidation
     private String password;
 
-    @NotNull
-    @Size(min = 6, max = 12, message = "{invalid.password}")
+    @PasswordValidation
     private String passwordConfirm;
 
 }

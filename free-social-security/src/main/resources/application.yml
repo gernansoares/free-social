@@ -4,9 +4,6 @@ server:
 
   port: 8082
 
-  error:
-    include-message: always
-
 spring:
   application:
     name: free-social-security

@@ -1,4 +1,4 @@
-package com.freesocial.users.validation;
+package com.freesocial.users.common.validation;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
