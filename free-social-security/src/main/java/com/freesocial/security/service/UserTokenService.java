@@ -1,7 +1,7 @@
 package com.freesocial.security.service;
 
 import com.freesocial.lib.config.security.jwt.JwtUtil;
-import com.freesocial.lib.properties.ErroUtil;
+import com.freesocial.lib.properties.ErrorUtil;
 import com.freesocial.security.common.util.Constants;
 import com.freesocial.security.entity.UserToken;
 import com.freesocial.security.repository.UserTokenRepository;
@@ -24,7 +24,7 @@ public class UserTokenService {
     public UserToken registerToken(String generatedToken) {
         Optional<UserToken> tokenOpt = userTokenRepository.findByToken(generatedToken);
         tokenOpt.ifPresent(userToken -> {
-            throw new IllegalArgumentException(ErroUtil.getMessage(Constants.TOKEN_ALREADY_EXISTS));
+            throw new IllegalArgumentException(ErrorUtil.getMessage(Constants.TOKEN_ALREADY_EXISTS));
         });
 
         return userTokenRepository.save(new UserToken(generatedToken, jwtUtil.getUuidFromToken(generatedToken)));
@@ -33,7 +33,7 @@ public class UserTokenService {
     public void removeToken(String tokenToRemove) {
         Optional<UserToken> tokenOpt = userTokenRepository.findByToken(tokenToRemove);
         tokenOpt.orElseThrow(() -> {
-            throw new IllegalArgumentException(ErroUtil.getMessage(Constants.TOKEN_DOES_NOT_EXISTS));
+            throw new IllegalArgumentException(ErrorUtil.getMessage(Constants.TOKEN_DOES_NOT_EXISTS));
         });
 
         userTokenRepository.delete(tokenOpt.get());

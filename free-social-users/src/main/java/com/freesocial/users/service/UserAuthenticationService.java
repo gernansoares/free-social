@@ -2,7 +2,7 @@ package com.freesocial.users.service;
 
 import com.freesocial.lib.config.exceptions.UsernameAlreadyExistsException;
 import com.freesocial.lib.config.exceptions.UserNotFoundException;
-import com.freesocial.lib.properties.ErroUtil;
+import com.freesocial.lib.properties.ErrorUtil;
 import com.freesocial.users.common.util.Constants;
 import com.freesocial.users.common.util.UserUtils;
 import com.freesocial.users.dto.UserAuthenticationDTO;
@@ -31,7 +31,7 @@ public class UserAuthenticationService {
      */
     private void validatePasswordAndConfirmationMatch(String hashedPassword, String passwordConfirm) {
         if (!BCrypt.checkpw(passwordConfirm, hashedPassword)) {
-            throw new IllegalArgumentException(ErroUtil.getMessage(Constants.PASSWORD_CONFIRMATION_NOT_MATCH));
+            throw new IllegalArgumentException(ErrorUtil.getMessage(Constants.PASSWORD_CONFIRMATION_NOT_MATCH));
         }
     }
 
@@ -46,7 +46,7 @@ public class UserAuthenticationService {
 
         userAuthenticationRepository.findByUsernameIgnoreCase(userAuthentication.getUsername())
                 .ifPresent((p) -> {
-                    throw new UsernameAlreadyExistsException(ErroUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE));
+                    throw new UsernameAlreadyExistsException(ErrorUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE));
                 });
     }
 
@@ -63,7 +63,7 @@ public class UserAuthenticationService {
     private void validateUsernameChange(String oldUsername, String newUserName) {
         Optional<UserAuthentication> otherUserAuthentication = userAuthenticationRepository.findByUsernameIgnoreCase(newUserName);
         otherUserAuthentication.filter(other -> !other.getUsername().equals(oldUsername)).ifPresent((other) -> {
-            throw new UsernameAlreadyExistsException(ErroUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE));
+            throw new UsernameAlreadyExistsException(ErrorUtil.getMessage(Constants.USERNAME_ALREADY_IN_USE));
         });
     }
 
@@ -79,7 +79,7 @@ public class UserAuthenticationService {
 
         Optional<UserAuthentication> optUserAuthentication = userAuthenticationRepository.findByUser_Uuid(userUuid);
         UserAuthentication userAuthentication = optUserAuthentication
-                .orElseThrow(() -> new UserNotFoundException(ErroUtil.getMessage(Constants.USER_NOT_FOUND)));
+                .orElseThrow(() -> new UserNotFoundException(ErrorUtil.getMessage(Constants.USER_NOT_FOUND)));
 
         validatePasswordAndConfirmationMatch(password, authenticationDto.getPasswordConfirm());
         validateUsernameChange(userAuthentication.getUsername(), username);

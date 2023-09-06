@@ -1,25 +1,17 @@
 package com.freesocial.posts.service;
 
-import com.freesocial.lib.config.exceptions.FileUploadException;
-import com.freesocial.lib.properties.ErroUtil;
-import com.freesocial.posts.common.enums.ValidExtensions;
+import com.freesocial.lib.properties.ErrorUtil;
 import com.freesocial.posts.common.util.Constants;
 import com.freesocial.posts.common.util.PostUtil;
 import com.freesocial.posts.entity.Post;
-import com.freesocial.posts.repository.PostContentRepository;
 import com.freesocial.posts.repository.PostRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FilenameUtils;
-import org.assertj.core.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.File;
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -58,7 +50,7 @@ public class PostService {
      */
     public void delete(String postUuid, String userUuid) {
         Optional<Post> postOpt = postRepository.findByPostUuid(postUuid);
-        Post post = postOpt.orElseThrow(() -> new IllegalArgumentException(ErroUtil.getMessage(Constants.POST_NOT_FOUND)));
+        Post post = postOpt.orElseThrow(() -> new IllegalArgumentException(ErrorUtil.getMessage(Constants.POST_NOT_FOUND)));
 
         postUtil.validatePostBelongsToUser(post, userUuid);
 

@@ -1,12 +1,12 @@
 package com.freesocial.lib.config.exceptions;
 
 import com.freesocial.lib.common.util.Constants;
-import com.freesocial.lib.properties.ErroUtil;
+import com.freesocial.lib.properties.ErrorUtil;
 
 public class FileUploadException extends FreeSocialException {
 
     public FileUploadException() {
-        super(ErroUtil.getMessage(Constants.FILE_UPLOAD_ERROR));
+        super(ErrorUtil.getMessage(Constants.FILE_UPLOAD_ERROR));
     }
 
     public FileUploadException(String msg) {

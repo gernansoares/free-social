@@ -1,5 +1,7 @@
 package com.freesocial.users.dto;
 
+import com.freesocial.users.validation.BioValidation;
+import com.freesocial.users.validation.NameValidation;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -9,11 +11,10 @@ import lombok.Setter;
 @Data
 public class UserProfileDTO {
 
-    @NotNull
-    @Size(min = 1, max = 255, message = "{invalid.name}")
+    @NameValidation
     private String name;
 
-    @Size(min = 0, max = 500, message = "{invalid.bio}")
+    @BioValidation
     private String bio;
 
 }

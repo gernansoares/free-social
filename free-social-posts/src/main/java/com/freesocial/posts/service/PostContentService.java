@@ -1,7 +1,7 @@
 package com.freesocial.posts.service;
 
 import com.freesocial.lib.config.exceptions.FileUploadException;
-import com.freesocial.lib.properties.ErroUtil;
+import com.freesocial.lib.properties.ErrorUtil;
 import com.freesocial.posts.common.enums.ValidExtensions;
 import com.freesocial.posts.common.exceptions.PostNotFoundException;
 import com.freesocial.posts.common.util.Constants;
@@ -46,7 +46,7 @@ public class PostContentService {
      */
     public void validatePostContent(Post post) {
         if (Strings.isNullOrEmpty(post.getContent().getText()) && Strings.isNullOrEmpty(post.getContent().getFileDir())) {
-            throw new IllegalArgumentException(ErroUtil.getMessage(Constants.TEXT_OR_FILE_REQUIRED));
+            throw new IllegalArgumentException(ErrorUtil.getMessage(Constants.TEXT_OR_FILE_REQUIRED));
         }
     }
 
@@ -57,7 +57,7 @@ public class PostContentService {
      */
     private void validateExtensions(FilePart file) {
         if (!ValidExtensions.isExtensionValid(FilenameUtils.getExtension(file.filename()))) {
-            throw new FileUploadException(ErroUtil.getMessage(Constants.INVALID_FILE_EXTENSION,
+            throw new FileUploadException(ErrorUtil.getMessage(Constants.INVALID_FILE_EXTENSION,
                     Arrays.stream(ValidExtensions.values()).map(ValidExtensions::name).collect(Collectors.joining(", "))));
         }
     }

@@ -1,5 +1,7 @@
 package com.freesocial.users.dto;
 
+import com.freesocial.users.validation.PasswordValidation;
+import com.freesocial.users.validation.UsernameValidation;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -9,16 +11,13 @@ import lombok.Setter;
 @Data
 public class UserAuthenticationDTO {
 
-    @NotNull
-    @Size(min = 5, max = 20, message = "{invalid.username}")
+    @UsernameValidation
     private String username;
 
-    @NotNull
-    @Size(min = 6, max = 12, message = "{invalid.password}")
+    @PasswordValidation
     private String password;
 
-    @NotNull
-    @Size(min = 6, max = 12, message = "{invalid.password}")
+    @PasswordValidation
     private String passwordConfirm;
 
 }

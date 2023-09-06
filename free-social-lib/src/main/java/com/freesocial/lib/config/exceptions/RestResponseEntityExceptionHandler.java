@@ -26,13 +26,13 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {IllegalArgumentException.class, NullPointerException.class, FreeSocialException.class})
     protected ResponseEntity handleWrongInformation(Exception ex) {
-        log.error(ExceptionUtils.getStackTrace(ex));
+        log.error(ExceptionUtils.getMessage(ex));
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     protected ResponseEntity handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
-        log.error(ExceptionUtils.getStackTrace(ex));
+        log.error(ExceptionUtils.getMessage(ex));
         Map<String, String> errorMap = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
@@ -40,7 +40,7 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {WebExchangeBindException.class})
     protected ResponseEntity handleMethodArgumentNotValid(WebExchangeBindException ex) {
-        log.error(ExceptionUtils.getStackTrace(ex));
+        log.error(ExceptionUtils.getMessage(ex));
         Map<String, String> errorMap = ex.getBindingResult().getFieldErrors().stream()
                 .collect(Collectors.toMap(FieldError::getField, FieldError::getDefaultMessage));
         return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
@@ -48,7 +48,7 @@ public class RestResponseEntityExceptionHandler {
 
     @ExceptionHandler(value = {Exception.class})
     protected ResponseEntity handleGeneralErrors(Exception ex) {
-        log.error(ExceptionUtils.getStackTrace(ex));
+        log.error(ExceptionUtils.getMessage(ex));
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 

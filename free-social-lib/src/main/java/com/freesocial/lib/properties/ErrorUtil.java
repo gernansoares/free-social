@@ -12,14 +12,14 @@ import java.util.ResourceBundle;
  * Maps errors.properties as a bean and can be used to read its values
  */
 @Configuration
-public class ErroUtil {
+public class ErrorUtil {
 
     private static final String FILE = "errors";
 
     private static ResourceBundle resourceBundle;
 
     @Bean
-    public MessageSource errosSource() {
+    public MessageSource errorsSource() {
         ReloadableResourceBundleMessageSource errosSource = new ReloadableResourceBundleMessageSource();
         errosSource.setBasename("classpath:" + FILE);
         return errosSource;
@@ -28,7 +28,7 @@ public class ErroUtil {
     @Bean
     public LocalValidatorFactoryBean validatorFactoryBean() {
         LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-        bean.setValidationMessageSource(errosSource());
+        bean.setValidationMessageSource(errorsSource());
         return bean;
     }
 
