@@ -9,6 +9,7 @@ import com.freesocial.posts.repository.UserPostLikeRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.RetryPolicy;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -27,7 +28,7 @@ public class TryPostLikeService {
     @Autowired
     private UserPostLikeRepository postLikeRepository;
 
-    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class)
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void tryLike(PostLikeCounter postLikes, String userUuid) {
         Optional<UserPostLike> likeOpt = postLikeRepository.findByPost_PostUuidAndUserUuid(postLikes.getPost().getPostUuid(), userUuid);
         postLikes.incrementOrDecrement(!likeOpt.isPresent());
