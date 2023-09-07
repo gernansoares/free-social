@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PostLike {
+public class UserPostLike {
 
     @Id
     @GeneratedValue
@@ -26,8 +26,8 @@ public class PostLike {
     @JoinColumn(updatable = false)
     private Post post;
 
-    public static PostLike create(Post post, String userUuid) {
-        PostLike postLike = new PostLike();
+    public static UserPostLike create(Post post, String userUuid) {
+        UserPostLike postLike = new UserPostLike();
         postLike.userUuid = userUuid;
         postLike.post = post;
         return postLike;

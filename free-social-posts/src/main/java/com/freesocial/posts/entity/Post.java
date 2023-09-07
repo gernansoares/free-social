@@ -40,12 +40,12 @@ public class Post {
     @NotNull
     @OneToOne(mappedBy = "post", fetch = FetchType.LAZY,
             cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
-    private PostLikes likes;
+    private PostLikeCounter likes;
 
     public static Post create(PostDTO dto, String userUuid) {
         Post post = new Post();
         PostContent postContent = new PostContent(dto.getText(), post);
-        PostLikes postLikes = new PostLikes(post);
+        PostLikeCounter postLikes = new PostLikeCounter(post);
 
         post.userUuid = userUuid;
         post.postUuid = UUID.randomUUID().toString();

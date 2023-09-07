@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class PostLikes {
+public class PostLikeCounter {
 
     @Id
     @GeneratedValue
@@ -35,7 +35,7 @@ public class PostLikes {
         count = 0;
     }
 
-    PostLikes(Post post) {
+    PostLikeCounter(Post post) {
         this.post = post;
     }
 

@@ -4,7 +4,7 @@ import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.posts.dto.PostDTO;
 import com.freesocial.posts.entity.Post;
 import com.freesocial.posts.service.PostContentService;
-import com.freesocial.posts.service.PostLikesService;
+import com.freesocial.posts.service.PostLikeService;
 import com.freesocial.posts.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +27,7 @@ public class PostController {
     private PostService postService;
 
     @Autowired
-    private PostLikesService postLikesService;
+    private PostLikeService postLikesService;
 
     @Autowired
     private PostContentService postContentService;
@@ -58,13 +58,9 @@ public class PostController {
     })
     public void like(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
                      @PathVariable String postUuid) {
-        try {
-            log.info(String.format("User with UUID %s liking post with UUID %s", postUuid, userUuid));
-            postLikesService.like(postUuid, userUuid);
-            log.info(String.format("User with UUID %s liked post with UUID %s successfully", postUuid, userUuid));
-        } catch (ObjectOptimisticLockingFailureException e) {
-            like(postUuid, userUuid);
-        }
+        log.info(String.format("User with UUID %s likes post with UUID %s", postUuid, userUuid));
+        postLikesService.like(postUuid, userUuid);
+        log.info(String.format("User with UUID %s liked post with UUID %s successfully", postUuid, userUuid));
     }
 
     @PutMapping("{postUuid}")
