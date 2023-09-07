@@ -58,9 +58,9 @@ public class PostController {
     })
     public void like(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
                      @PathVariable String postUuid) {
-        log.info(String.format("User with UUID %s likes post with UUID %s", postUuid, userUuid));
+        log.info(String.format("User with UUID %s likes post with UUID %s", userUuid, postUuid));
         postLikesService.like(postUuid, userUuid);
-        log.info(String.format("User with UUID %s liked post with UUID %s successfully", postUuid, userUuid));
+        log.info(String.format("User with UUID %s liked post with UUID %s successfully", userUuid, postUuid));
     }
 
     @PutMapping("{postUuid}")

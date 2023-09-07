@@ -21,6 +21,13 @@ spring:
     idle-timeout: 300000
     minIdle: 5
 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8085/eureka
+
 freesocial:
   posts:
     filesdir: "D:/freesocial/posts/files/%s.%s"

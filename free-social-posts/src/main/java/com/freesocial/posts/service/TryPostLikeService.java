@@ -28,8 +28,11 @@ public class TryPostLikeService {
     @Autowired
     private UserPostLikeRepository postLikeRepository;
 
-    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
-    public void tryLike(PostLikeCounter postLikes, String userUuid) {
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class)
+    public void tryLike(String postUuid, String userUuid) {
+        Optional<PostLikeCounter> likesOpt = postLikesRepository.findByPost_PostUuid(postUuid);
+        PostLikeCounter postLikes = likesOpt.orElseThrow(() -> new PostNotFoundException());
+
         Optional<UserPostLike> likeOpt = postLikeRepository.findByPost_PostUuidAndUserUuid(postLikes.getPost().getPostUuid(), userUuid);
         postLikes.incrementOrDecrement(!likeOpt.isPresent());
         postLikesRepository.save(postLikes);

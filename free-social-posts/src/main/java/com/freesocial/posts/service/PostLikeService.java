@@ -42,10 +42,7 @@ public class PostLikeService {
      * @param userUuid identifies the user
      */
     public void like(String postUuid, String userUuid) {
-        Optional<PostLikeCounter> likesOpt = postLikesRepository.findByPost_PostUuid(postUuid);
-        PostLikeCounter postLikes = likesOpt.orElseThrow(() -> new PostNotFoundException());
-
-        tryPostLikeService.tryLike(postLikes, userUuid);
+        tryPostLikeService.tryLike(postUuid, userUuid);
     }
 
 }
