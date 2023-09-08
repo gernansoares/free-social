@@ -10,6 +10,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -46,6 +47,10 @@ public class UserService {
         Optional<FreeSocialUser> user = userRepository.findByUuid(uuid);
         userRepository.delete(user.orElseThrow(() -> new IllegalArgumentException(ErrorUtil.getMessage(Constants.USER_NOT_FOUND))));
         kafkaTemplate.send(KafkaTopicConfig.DELETE_ALL_TOKENS_TOPIC, uuid);
+    }
+
+    public List<FreeSocialUser> findAll() {
+        return userRepository.findAll();
     }
 
 }

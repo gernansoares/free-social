@@ -8,7 +8,7 @@ import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import reactor.core.publisher.Hooks;
 
-@EnableDiscoveryClient(autoRegister = false)
+@EnableDiscoveryClient
 @SpringBootApplication
 @EnableWebFlux
 @EnableRetry

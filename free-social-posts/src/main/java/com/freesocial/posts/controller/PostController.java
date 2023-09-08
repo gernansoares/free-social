@@ -1,17 +1,20 @@
 package com.freesocial.posts.controller;
 
+import com.freesocial.lib.config.WebClientConfig;
 import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.posts.dto.PostDTO;
 import com.freesocial.posts.entity.Post;
 import com.freesocial.posts.service.PostContentService;
 import com.freesocial.posts.service.PostLikeService;
 import com.freesocial.posts.service.PostService;
+import com.netflix.discovery.DiscoveryClient;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.orm.ObjectOptimisticLockingFailureException;
@@ -57,6 +60,7 @@ public class PostController {
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
     public void like(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
+                     @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                      @PathVariable String postUuid) {
         log.info(String.format("User with UUID %s likes post with UUID %s", userUuid, postUuid));
         postLikesService.like(postUuid, userUuid);

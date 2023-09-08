@@ -3,6 +3,7 @@ package com.freesocial.users.controller;
 import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.users.dto.UserAuthenticationDTO;
 import com.freesocial.users.dto.UserProfileDTO;
+import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.service.UserAuthenticationService;
 import com.freesocial.users.service.UserProfileService;
 import com.freesocial.users.service.UserService;
@@ -14,6 +15,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/users")
@@ -69,5 +73,12 @@ public class UserController {
         userService.delete(userUuid);
         log.info(String.format("User with UUID %s deleted successfully", userUuid));
     }
+
+    @GetMapping
+    public Flux<String> findAll() {
+        log.info("GETETET");
+        return Flux.fromIterable(userService.findAll().stream().map(u -> u.getProfile().getName()).collect(Collectors.toList()));
+    }
+
 
 }

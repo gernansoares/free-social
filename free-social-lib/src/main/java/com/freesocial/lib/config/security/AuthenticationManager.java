@@ -1,5 +1,6 @@
 package com.freesocial.lib.config.security;
 
+import com.freesocial.lib.config.exceptions.FreeSocialException;
 import com.freesocial.lib.config.security.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
@@ -28,23 +29,24 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
-        try {
-            String authToken = authentication.getCredentials().toString();
-            jwtUtil.validateToken(authToken);
 
-            return Mono.just(authToken)
-                    .map(token -> {
-                        Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
-                        List<String> rolesMap = claims.get("role", List.class);
-                        return new UsernamePasswordAuthenticationToken(
-                                jwtUtil.getUsernameFromToken(authToken),
-                                authToken,
-                                rolesMap.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList())
-                        );
-                    });
+        return Mono.just(authentication.getCredentials().toString())
+                .flatMap(authToken -> {
+                    try {
+                        jwtUtil.validateToken(authToken);
+                    } catch (JwtException e) {
+                        return Mono.empty();
+                    }
 
-        } catch (JwtException e) {
-            return Mono.empty();
-        }
+                    Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
+                    List<String> rolesMap = claims.get("role", List.class);
+
+                    return Mono.just(new UsernamePasswordAuthenticationToken(
+                            jwtUtil.getUsernameFromToken(authToken),
+                            authToken,
+                            rolesMap.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()))
+                    );
+                });
+
     }
 }

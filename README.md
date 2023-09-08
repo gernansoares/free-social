@@ -5,6 +5,7 @@ Example project of a social network implemented with microservices architecture
 ## Projects
 
 * _**free-social-lib**_: Common classes and configurations for all projects
+* _**free-social-service-discovery**_: For all microservices registration and discover
 * _**free-social-gateway**_: API Gateway, downstream requests to services
 * _**free-social-security**_: Authentication and token registration/invalidation
 * _**free-social-users**_: Users service, CRUD operations
@@ -17,6 +18,7 @@ Example project of a social network implemented with microservices architecture
 * Spring Security
 * Spring Cloud Gateway
 * Spring WebFlux
+* Netflix Eureka  
 * Micrometer tracing
 * Maven
 * JWT

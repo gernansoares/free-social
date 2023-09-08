@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
 @Slf4j
 public class TryPostLikeService {
 
@@ -28,7 +27,8 @@ public class TryPostLikeService {
     @Autowired
     private UserPostLikeRepository postLikeRepository;
 
-    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class)
+    @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRES_NEW)
+    @Retryable(retryFor = ObjectOptimisticLockingFailureException.class, maxAttempts = 10)
     public void tryLike(String postUuid, String userUuid) {
         Optional<PostLikeCounter> likesOpt = postLikesRepository.findByPost_PostUuid(postUuid);
         PostLikeCounter postLikes = likesOpt.orElseThrow(() -> new PostNotFoundException());
