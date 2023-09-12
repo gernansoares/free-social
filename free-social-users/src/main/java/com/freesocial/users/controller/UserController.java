@@ -1,9 +1,8 @@
 package com.freesocial.users.controller;
 
-import com.freesocial.lib.config.security.JwtAuthenticationFilter;
+import com.freesocial.lib.config.GlobalContants;
 import com.freesocial.users.dto.UserAuthenticationDTO;
 import com.freesocial.users.dto.UserProfileDTO;
-import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.service.UserAuthenticationService;
 import com.freesocial.users.service.UserProfileService;
 import com.freesocial.users.service.UserService;
@@ -40,7 +39,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Profile updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void updateProfile(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
+    public void updateProfile(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                               @RequestBody @Valid UserProfileDTO profileDto) {
         log.info(String.format("Updating user with UUID %s profile", userUuid));
         userProfileService.update(profileDto, userUuid);
@@ -54,7 +53,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "Password updated"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void updateAuthentication(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid,
+    public void updateAuthentication(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                                      @RequestBody @Valid UserAuthenticationDTO authenticationDto) {
         log.info(String.format("Updating user with UUID %s authentication", userUuid));
         userAuthenticationService.update(authenticationDto, userUuid);
@@ -68,7 +67,7 @@ public class UserController {
             @ApiResponse(responseCode = "200", description = "User deleted"),
             @ApiResponse(responseCode = "400", description = "Invalid information"),
     })
-    public void delete(@RequestHeader(JwtAuthenticationFilter.HEADER_UUID) String userUuid) {
+    public void delete(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid) {
         log.info(String.format("Deleting user with UUID %s", userUuid));
         userService.delete(userUuid);
         log.info(String.format("User with UUID %s deleted successfully", userUuid));

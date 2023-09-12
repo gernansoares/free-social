@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Utility class for JWT related operations such as generation, info extraction and validation
+ * JWT related operations such as generation, info extraction and validation
  */
 @Configuration
 public class JwtUtil {

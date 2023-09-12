@@ -11,6 +11,10 @@ import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Defines configuration for consuming messages through Apache Kafka
+ * This class will be used when listening for topics
+ */
 @EnableKafka
 @Configuration
 public class KafkaConsumerConfig {
@@ -19,7 +23,7 @@ public class KafkaConsumerConfig {
         Map<String, Object> props = new HashMap<>();
         props.put(
                 ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                KafkaTopicConfig.BOOTSTRAP_ADRESS);
+                KafkaDefaultConfig.BOOTSTRAP_ADRESS);
         props.put(
                 ConsumerConfig.GROUP_ID_CONFIG,
                 groupId);

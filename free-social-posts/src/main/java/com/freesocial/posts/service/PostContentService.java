@@ -2,7 +2,7 @@ package com.freesocial.posts.service;
 
 import com.freesocial.lib.config.exceptions.FileUploadException;
 import com.freesocial.lib.properties.ErrorUtil;
-import com.freesocial.posts.common.enums.ValidExtensions;
+import com.freesocial.posts.common.enums.ValidUploadExtensions;
 import com.freesocial.posts.common.exceptions.PostNotFoundException;
 import com.freesocial.posts.common.util.Constants;
 import com.freesocial.posts.common.util.PostUtil;
@@ -56,9 +56,9 @@ public class PostContentService {
      * @param file its name will be the source of the extension
      */
     private void validateExtensions(FilePart file) {
-        if (!ValidExtensions.isExtensionValid(FilenameUtils.getExtension(file.filename()))) {
+        if (!ValidUploadExtensions.isExtensionValid(FilenameUtils.getExtension(file.filename()))) {
             throw new FileUploadException(ErrorUtil.getMessage(Constants.INVALID_FILE_EXTENSION,
-                    Arrays.stream(ValidExtensions.values()).map(ValidExtensions::name).collect(Collectors.joining(", "))));
+                    Arrays.stream(ValidUploadExtensions.values()).map(ValidUploadExtensions::name).collect(Collectors.joining(", "))));
         }
     }
 

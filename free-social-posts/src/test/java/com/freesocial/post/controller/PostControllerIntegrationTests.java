@@ -1,7 +1,7 @@
 package com.freesocial.post.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freesocial.lib.config.security.JwtAuthenticationFilter;
+import com.freesocial.lib.config.GlobalContants;
 import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.lib.common.util.Profiles;
 import com.freesocial.posts.FreeSocialPostsApplication;
@@ -69,7 +69,7 @@ class PostControllerIntegrationTests extends BasicTest {
                 .contentType(MediaType.APPLICATION_JSON);
 
         webTestClient.post().uri("/posts")
-                .header(JwtAuthenticationFilter.HEADER_UUID, "uuid")
+                .header(GlobalContants.HEADER_UUID, "uuid")
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
                 .exchange()
                 .expectStatus().isCreated();
@@ -91,7 +91,7 @@ class PostControllerIntegrationTests extends BasicTest {
                 .contentType(MediaType.APPLICATION_OCTET_STREAM);
 
         webTestClient.post().uri("/posts")
-                .header(JwtAuthenticationFilter.HEADER_UUID, "uuid")
+                .header(GlobalContants.HEADER_UUID, "uuid")
                 .contentType(MediaType.MULTIPART_FORM_DATA)
                 .body(BodyInserters.fromMultipartData(multipartBodyBuilder.build()))
                 .exchange()
@@ -113,7 +113,7 @@ class PostControllerIntegrationTests extends BasicTest {
         postDto.setText("Today I had the best day!");
 
         webTestClient.put().uri("/posts/{postUuid}", addedPost.getPostUuid())
-                .header(JwtAuthenticationFilter.HEADER_UUID, addedPost.getUserUuid())
+                .header(GlobalContants.HEADER_UUID, addedPost.getUserUuid())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper().writeValueAsString(postDto))
                 .exchange()
@@ -130,7 +130,7 @@ class PostControllerIntegrationTests extends BasicTest {
     @Test
     void deletePost() throws Exception {
         webTestClient.delete().uri("/posts/{postUUid}", addedPost.getPostUuid())
-                .header(JwtAuthenticationFilter.HEADER_UUID, addedPost.getUserUuid())
+                .header(GlobalContants.HEADER_UUID, addedPost.getUserUuid())
                 .exchange()
                 .expectStatus().isOk();
 

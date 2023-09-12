@@ -1,14 +1,10 @@
 package com.freesocial.users.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freesocial.lib.config.security.JwtAuthenticationFilter;
 import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.users.FreeSocialUsersApplication;
 import com.freesocial.users.common.util.UserUtils;
-import com.freesocial.users.dto.UserAuthenticationDTO;
-import com.freesocial.users.dto.UserProfileDTO;
 import com.freesocial.users.dto.UserSignUpDTO;
-import com.freesocial.users.entity.FreeSocialUser;
 import com.freesocial.users.repository.UserAuthenticationRepository;
 import com.freesocial.users.repository.UserRepository;
 import com.freesocial.users.service.UserService;
@@ -18,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
 import static org.hamcrest.Matchers.*;

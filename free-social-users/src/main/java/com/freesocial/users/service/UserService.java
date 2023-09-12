@@ -1,6 +1,5 @@
 package com.freesocial.users.service;
 
-import com.freesocial.lib.config.kafka.KafkaTopicConfig;
 import com.freesocial.lib.properties.ErrorUtil;
 import com.freesocial.users.common.util.Constants;
 import com.freesocial.users.entity.FreeSocialUser;
@@ -16,6 +15,8 @@ import java.util.Optional;
 @Service
 @Transactional(rollbackFor = Exception.class)
 public class UserService {
+
+    private final String DELETE_ALL_TOKENS_TOPIC = "delete-all-tokens";
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -46,7 +47,7 @@ public class UserService {
     public void delete(String uuid) {
         Optional<FreeSocialUser> user = userRepository.findByUuid(uuid);
         userRepository.delete(user.orElseThrow(() -> new IllegalArgumentException(ErrorUtil.getMessage(Constants.USER_NOT_FOUND))));
-        kafkaTemplate.send(KafkaTopicConfig.DELETE_ALL_TOKENS_TOPIC, uuid);
+        kafkaTemplate.send(DELETE_ALL_TOKENS_TOPIC, uuid);
     }
 
     public List<FreeSocialUser> findAll() {

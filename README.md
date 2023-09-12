@@ -1,8 +1,8 @@
 # free-social
 
-Example project of a social network implemented with microservices architecture
+Sample project of a social network implemented with microservices architecture
 
-## Projects
+## Modules
 
 * _**free-social-lib**_: Common classes and configurations for all projects
 * _**free-social-service-discovery**_: For all microservices registration and discover

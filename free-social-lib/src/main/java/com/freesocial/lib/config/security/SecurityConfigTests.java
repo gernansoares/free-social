@@ -10,6 +10,8 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 /**
  * Defines the configuration for securing internal API access
+ * This configuration disables all security and should be used for testing purposes only
+ * Can be used by activating Profiles.TESTS_NO_SECURITY in tests classes
  */
 @Configuration
 @Profile(Profiles.TESTS_NO_SECURITY)

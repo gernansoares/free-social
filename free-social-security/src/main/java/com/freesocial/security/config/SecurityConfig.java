@@ -9,7 +9,7 @@ import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
 /**
- * Defines the configuration for securing internal API access
+ * Defines configuration for securing internal API access
  */
 @Configuration
 @Profile("!" + Profiles.TESTS_NO_SECURITY)
@@ -20,6 +20,7 @@ public class SecurityConfig extends DefaultSecurityConfig {
         super.prepareDefaultSecurity(http);
 
         http.authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec
+                .pathMatchers("/token/**").permitAll()
                 .pathMatchers("/auth/**").permitAll()
                 .pathMatchers("/logout/**").authenticated()
                 .anyExchange().denyAll()

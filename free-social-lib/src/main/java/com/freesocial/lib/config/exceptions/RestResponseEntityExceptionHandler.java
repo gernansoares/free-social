@@ -46,12 +46,6 @@ public class RestResponseEntityExceptionHandler {
         return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = {Exception.class})
-    protected ResponseEntity handleGeneralErrors(Exception ex) {
-        log.error(ExceptionUtils.getMessage(ex));
-        return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
     @ExceptionHandler(DataBufferLimitException.class)
     public ResponseEntity handleMaxSizeException(DataBufferLimitException exc) {
         return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new FileUploadException());

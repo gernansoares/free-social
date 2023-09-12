@@ -1,7 +1,7 @@
 package com.freesocial.users.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.freesocial.lib.config.security.JwtAuthenticationFilter;
+import com.freesocial.lib.config.GlobalContants;
 import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.lib.common.util.Profiles;
 import com.freesocial.users.FreeSocialUsersApplication;
@@ -83,7 +83,7 @@ class UserControllerIntegrationTests extends BasicTest {
         userProfileDTO.setBio("New bio");
 
         webTestClient.put().uri("/users/profile")
-                .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
+                .header(GlobalContants.HEADER_UUID, addedUser.getUuid())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper().writeValueAsString(userProfileDTO))
                 .exchange()
@@ -109,7 +109,7 @@ class UserControllerIntegrationTests extends BasicTest {
         userPasswordDto.setPasswordConfirm("654321");
 
         webTestClient.put().uri("/users/authentication")
-                .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
+                .header(GlobalContants.HEADER_UUID, addedUser.getUuid())
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper().writeValueAsString(userPasswordDto))
                 .exchange()
@@ -134,7 +134,7 @@ class UserControllerIntegrationTests extends BasicTest {
     @Test
     void deleteUser() throws Exception {
         webTestClient.delete().uri("/users")
-                .header(JwtAuthenticationFilter.HEADER_UUID, addedUser.getUuid())
+                .header(GlobalContants.HEADER_UUID, addedUser.getUuid())
                 .exchange()
                 .expectStatus().isOk();
 

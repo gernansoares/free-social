@@ -1,20 +1,19 @@
 package com.freesocial.lib.config.security;
 
+import com.freesocial.lib.config.GlobalContants;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
- * Looks for a presence of a Authorization and Bearer header to start authentication
+ * Looks for a presence of a Authorization and Bearer header to start validation
  */
 @Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
@@ -30,7 +29,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
     @Override
     public Mono<SecurityContext> load(ServerWebExchange swe) {
         return Mono.justOrEmpty(swe.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
-                .filter(authHeader -> authHeader.startsWith(JwtAuthenticationFilter.BEARER_TOKEN_PREFIX))
+                .filter(authHeader -> authHeader.startsWith(GlobalContants.BEARER_TOKEN_PREFIX))
                 .flatMap(authHeader -> {
                     String authToken = authHeader.substring(7);
                     Authentication auth = new UsernamePasswordAuthenticationToken(authToken, authToken);

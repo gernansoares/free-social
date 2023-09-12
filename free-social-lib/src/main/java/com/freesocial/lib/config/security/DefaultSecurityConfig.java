@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import reactor.core.publisher.Mono;
 
 /**
- * Defines the configuration for securing internal and external API access
+ * Defines the minimal configuration for securing internal and external API access
  */
 @Configuration
 @EnableWebFluxSecurity

@@ -10,10 +10,11 @@ import org.springframework.kafka.core.KafkaAdmin;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Defines configuration for connecting to Apache Kafka
+ */
 @Configuration
-public class KafkaTopicConfig {
-
-    public static final String DELETE_ALL_TOKENS_TOPIC = "delete-all-tokens";
+public class KafkaDefaultConfig {
 
     public static final String BOOTSTRAP_ADRESS = "localhost:9092";
 

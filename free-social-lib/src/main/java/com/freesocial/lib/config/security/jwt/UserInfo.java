@@ -10,9 +10,12 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@ToString
-@AllArgsConstructor
+/**
+ * Defines fields por authentication process
+ */
 @Getter
+@AllArgsConstructor
+@ToString
 public class UserInfo {
 
     private static final long serialVersionUID = 1L;

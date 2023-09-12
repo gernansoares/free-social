@@ -17,9 +17,14 @@ import java.net.URI;
 import java.util.Collections;
 import java.util.Set;
 
+/**
+ * Adds log for each incoming request which had its URI overridden by gateway
+ * GATEWAY_ORIGINAL_REQUEST_URL_ATTR =  the original URI
+ */
 @Component
 @Slf4j
 public class LoggingFilter implements GlobalFilter {
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         Set<URI> uris = exchange.getAttributeOrDefault(GATEWAY_ORIGINAL_REQUEST_URL_ATTR, Collections.emptySet());
@@ -28,4 +33,5 @@ public class LoggingFilter implements GlobalFilter {
         log.info(String.format("Incoming request %s is routed to URI %s", originalUri, routeUri));
         return chain.filter(exchange);
     }
+
 }

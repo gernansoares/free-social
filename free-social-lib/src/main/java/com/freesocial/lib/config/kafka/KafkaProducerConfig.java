@@ -11,6 +11,10 @@ import org.springframework.kafka.core.ProducerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Defines configuration for producing messages through Apache Kafka
+ * by using KafkaTemplate
+ */
 @Configuration
 public class KafkaProducerConfig {
 
@@ -19,7 +23,7 @@ public class KafkaProducerConfig {
         Map<String, Object> configProps = new HashMap<>();
         configProps.put(
                 ProducerConfig.BOOTSTRAP_SERVERS_CONFIG,
-                KafkaTopicConfig.BOOTSTRAP_ADRESS);
+                KafkaDefaultConfig.BOOTSTRAP_ADRESS);
         configProps.put(
                 ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG,
                 StringSerializer.class);
