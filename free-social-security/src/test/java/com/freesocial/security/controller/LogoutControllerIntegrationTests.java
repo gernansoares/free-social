@@ -2,6 +2,7 @@ package com.freesocial.security.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.freesocial.lib.common.util.Profiles;
 import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.security.FreeSocialSecurityApplication;
 import com.freesocial.security.dto.AuthRequest;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -19,6 +21,7 @@ import static org.hamcrest.Matchers.notNullValue;
 
 @SpringBootTest(classes = FreeSocialSecurityApplication.class)
 @AutoConfigureWebTestClient
+@ActiveProfiles(Profiles.TESTS_NO_AUTHENTICATION_SERVICE)
 class LogoutControllerIntegrationTests extends BasicTest {
 
     @Autowired

@@ -8,6 +8,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"userUuid", "post_id"})})
 @Getter
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
@@ -18,6 +20,7 @@ public class UserPostLike {
     @EqualsAndHashCode.Include
     private Long id;
 
+    @NotNull
     @NotBlank
     private String userUuid;
 

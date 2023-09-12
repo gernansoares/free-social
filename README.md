@@ -5,7 +5,7 @@ Sample project of a social network implemented with microservices architecture
 ## Modules
 
 * _**free-social-lib**_: Common classes and configurations for all projects
-* _**free-social-service-discovery**_: For all microservices registration and discover
+* _**free-social-service-discovery**_: Services registration and discover
 * _**free-social-gateway**_: API Gateway, downstream requests to services
 * _**free-social-security**_: Authentication and token registration/invalidation
 * _**free-social-users**_: Users service, CRUD operations
@@ -38,6 +38,7 @@ You can see all supported endpoints in AvaiableRoutes enum at gateway project, b
 
 * **/auth/login** - For login
 * **/logout/logout** - For logout
+* **/token** - For token validation (not registered in gateway, for internal usage only)
 * **/newuser** - Creates user
 * **/users** - Update and delete user
 * **/posts** - Posts CRUD

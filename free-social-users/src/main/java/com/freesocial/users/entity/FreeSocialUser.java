@@ -18,11 +18,11 @@ public class FreeSocialUser {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
     @NotNull
     @Column(updatable = false, unique = true)
+    @EqualsAndHashCode.Include
     private String uuid;
 
     @NotNull

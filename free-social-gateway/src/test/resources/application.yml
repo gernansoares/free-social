@@ -1,7 +1,4 @@
 spring:
-  main:
-    web-application-type: reactive
-
   application:
     name: free-social-gateway
 

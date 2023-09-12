@@ -13,7 +13,6 @@ public class UserAuthentication {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Setter
@@ -28,6 +27,7 @@ public class UserAuthentication {
     @NotNull
     @OneToOne
     @JoinColumn(updatable = false)
+    @EqualsAndHashCode.Include
     private FreeSocialUser user;
 
     @Transient

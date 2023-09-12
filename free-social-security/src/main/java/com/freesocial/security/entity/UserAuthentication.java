@@ -17,7 +17,6 @@ public class UserAuthentication {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
     private String username;
@@ -25,6 +24,7 @@ public class UserAuthentication {
     private String password;
 
     @OneToOne
+    @EqualsAndHashCode.Include
     private FreeSocialUser user;
 
     UserAuthentication(String username, String password, FreeSocialUser user) {

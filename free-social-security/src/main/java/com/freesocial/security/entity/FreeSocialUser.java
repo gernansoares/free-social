@@ -16,9 +16,9 @@ public class FreeSocialUser {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
+    @EqualsAndHashCode.Include
     private String uuid;
 
     private boolean enabled;

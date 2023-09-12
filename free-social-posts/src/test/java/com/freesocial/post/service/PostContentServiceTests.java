@@ -4,6 +4,7 @@ import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.posts.FreeSocialPostsApplication;
 import com.freesocial.posts.common.exceptions.PostNotFoundException;
 import com.freesocial.posts.dto.PostDTO;
+import com.freesocial.posts.entity.Post;
 import com.freesocial.posts.entity.PostContent;
 import com.freesocial.posts.repository.PostContentRepository;
 import com.freesocial.posts.service.PostContentService;
@@ -33,12 +34,14 @@ class PostContentServiceTests extends BasicTest {
         PostDTO postDto = new PostDTO();
         postDto.setText("Hello there");
 
+        Post post = Post.create(postDto, "123");
+
         //Post UUID will exists
-        when(postContentRepository.findByPost_PostUuid(any())).thenReturn(Optional.of(new PostContent()));
+        when(postContentRepository.findByPost_PostUuid(any())).thenReturn(Optional.of(post.getContent()));
 
         assertDoesNotThrow(() -> {
-            postContentService.update(postDto, "postUuid", "userUuid");
-        }, "Post exists");
+            postContentService.update(postDto, post.getPostUuid(), post.getUserUuid());
+        }, "Post exists and should be updated");
     }
 
     @Test

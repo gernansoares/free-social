@@ -11,11 +11,11 @@
 
     <modules>
         <module>free-social-lib</module>
-        <module>free-social-gateway</module>
-        <module>free-social-users</module>
-        <module>free-social-security</module>
-        <module>free-social-posts</module>
         <module>free-social-service-discovery</module>
+        <module>free-social-gateway</module>
+        <module>free-social-security</module>
+        <module>free-social-users</module>
+        <module>free-social-posts</module>
     </modules>
 
     <properties>

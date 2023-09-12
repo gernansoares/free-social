@@ -16,7 +16,6 @@ public class PostLikeCounter {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
     @NotNull
@@ -25,6 +24,7 @@ public class PostLikeCounter {
     @NotNull
     @OneToOne
     @JoinColumn(updatable = false)
+    @EqualsAndHashCode.Include
     private Post post;
 
     @Version

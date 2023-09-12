@@ -12,7 +12,6 @@ public class UserProfile {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Setter
@@ -26,6 +25,7 @@ public class UserProfile {
     @NotNull
     @OneToOne
     @JoinColumn(updatable = false)
+    @EqualsAndHashCode.Include
     private FreeSocialUser user;
 
     UserProfile(String name, String bio, FreeSocialUser user) {

@@ -1,12 +1,11 @@
 package com.freesocial.lib.config.security;
 
-import com.freesocial.lib.config.exceptions.UserNotFoundException;
+import com.freesocial.lib.common.util.Profiles;
 import com.freesocial.lib.config.security.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
+import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -16,6 +15,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -32,18 +32,26 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
+    @Autowired
+    private Environment environment;
+
     /**
      * Verifies if token exists in security service
+     * Will ignore validation in service if active profiles = Profiles.TESTS_NO_AUTHENTICATION_SERVICE
      *
      * @param token token that will be validated
      */
     private Mono<String> validateTokenInService(String token) {
-        return webClientBuilder.baseUrl("http://free-social-security")
-                .build().get().uri(String.format("/token/%s", token))
-                .retrieve()
-                .toBodilessEntity()
-                .onErrorResume(e -> Mono.empty())
-                .flatMap(response -> Mono.just(token));
+        if (!Objects.equals(Profiles.TESTS_NO_AUTHENTICATION_SERVICE, environment.getActiveProfiles()[0])) {
+            return webClientBuilder.baseUrl("http://free-social-security")
+                    .build().get().uri(String.format("/token/%s", token))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .onErrorResume(e -> Mono.empty())
+                    .flatMap(response -> Mono.just(token));
+        } else {
+            return Mono.just(token);
+        }
     }
 
     /**

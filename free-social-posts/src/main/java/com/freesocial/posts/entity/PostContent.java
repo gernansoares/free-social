@@ -19,7 +19,6 @@ public class PostContent {
 
     @Id
     @GeneratedValue
-    @EqualsAndHashCode.Include
     private Long id;
 
     @Setter
@@ -33,6 +32,7 @@ public class PostContent {
     @NotNull
     @OneToOne
     @JoinColumn(updatable = false)
+    @EqualsAndHashCode.Include
     private Post post;
 
     PostContent(String text, Post post) {
