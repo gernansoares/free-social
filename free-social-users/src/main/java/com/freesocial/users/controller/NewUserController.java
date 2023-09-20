@@ -26,8 +26,8 @@ public class NewUserController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @Operation(summary = "Creates a new user")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Created user"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "201", description = "User created"),
+            @ApiResponse(responseCode = "400", description = "Password/confirmation does not match | Username already in use"),
     })
     public Mono<UserDTO> create(@RequestBody @Valid UserSignUpDTO userDto) {
         FreeSocialUser user = FreeSocialUser.of(userDto);

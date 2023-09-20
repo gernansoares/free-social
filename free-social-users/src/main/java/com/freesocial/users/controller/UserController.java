@@ -37,7 +37,8 @@ public class UserController {
     @Operation(summary = "Update user's profile")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile updated"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "400", description = "User not found"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized")
     })
     public void updateProfile(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                               @RequestBody @Valid UserProfileDTO profileDto) {
@@ -51,7 +52,8 @@ public class UserController {
     @Operation(summary = "Update user's username and password")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Password updated"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "400", description = "User not found | Password/confirmation does not match | Username already in use"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized")
     })
     public void updateAuthentication(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                                      @RequestBody @Valid UserAuthenticationDTO authenticationDto) {
@@ -65,19 +67,13 @@ public class UserController {
     @Operation(summary = "Delete a user and its dependencies")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "User deleted"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "400", description = "User not found"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized")
     })
     public void delete(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid) {
         log.info(String.format("Deleting user with UUID %s", userUuid));
         userService.delete(userUuid);
         log.info(String.format("User with UUID %s deleted successfully", userUuid));
     }
-
-    @GetMapping
-    public Flux<String> findAll() {
-        log.info("GETETET");
-        return Flux.fromIterable(userService.findAll().stream().map(u -> u.getProfile().getName()).collect(Collectors.toList()));
-    }
-
 
 }

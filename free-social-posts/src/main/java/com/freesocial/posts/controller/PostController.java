@@ -37,7 +37,8 @@ public class PostController {
     @Operation(summary = "Creates a new post")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Post created"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "400", description = "Text or file missing | Invalid file extension"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized"),
     })
     public Mono<String> create(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                                @RequestPart @Valid PostDTO newPost,
@@ -53,11 +54,11 @@ public class PostController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Creates likes or remove like of a post")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Post created"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "201", description = "Like created"),
+            @ApiResponse(responseCode = "400", description = "Post not found"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized"),
     })
     public void like(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
-                     @RequestHeader(HttpHeaders.AUTHORIZATION) String token,
                      @PathVariable String postUuid) {
         log.info(String.format("User with UUID %s likes post with UUID %s", userUuid, postUuid));
         postLikesService.like(postUuid, userUuid);
@@ -68,14 +69,15 @@ public class PostController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Update a post's")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Profile updated"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "200", description = "Post updated"),
+            @ApiResponse(responseCode = "400", description = "Post not found/don't belong to user | Invalid post's text"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized"),
     })
     public void update(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                        @PathVariable String postUuid,
-                       @RequestBody @Valid PostDTO profileDto) {
+                       @RequestBody @Valid PostDTO postDto) {
         log.info(String.format("Updating post with UUID %s by user with UUID %s", postUuid, userUuid));
-        postContentService.update(profileDto, postUuid, userUuid);
+        postContentService.update(postDto, postUuid, userUuid);
         log.info(String.format("Post with UUID %s has updated successfully by user with UUID %s", postUuid, userUuid));
     }
 
@@ -83,8 +85,9 @@ public class PostController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Delete user and its dependencies")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "User deleted"),
-            @ApiResponse(responseCode = "400", description = "Invalid information"),
+            @ApiResponse(responseCode = "200", description = "Post deleted"),
+            @ApiResponse(responseCode = "400", description = "Post not found/don't belong to user"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized"),
     })
     public void delete(@RequestHeader(GlobalContants.HEADER_UUID) String userUuid,
                        @PathVariable String postUuid) {

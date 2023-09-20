@@ -26,6 +26,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://localhost:8085/eureka
+      defaultZone: http://raspberryge:8085/eureka
   instance:
     lease-renewal-interval-in-seconds: 5

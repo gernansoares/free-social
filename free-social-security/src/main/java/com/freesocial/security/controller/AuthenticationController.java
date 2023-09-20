@@ -34,7 +34,7 @@ public class AuthenticationController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Provides user authentication by checking username and password")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Information is correct, a new token is generated and returned"),
+            @ApiResponse(responseCode = "200", description = "Information is correct, a new token is generated"),
             @ApiResponse(responseCode = "401", description = "Incorrect login information"),
     })
     public Mono<ResponseEntity<AuthResponse>> login(@RequestBody @Valid AuthRequest ar) {

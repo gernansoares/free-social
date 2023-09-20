@@ -27,7 +27,8 @@ public class LogoutController {
     @ResponseStatus(code = HttpStatus.OK)
     @Operation(summary = "Provides user logout by sending token for removal")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Token checked and send to removal")
+            @ApiResponse(responseCode = "200", description = "Token checked and send to removal"),
+            @ApiResponse(responseCode = "401", description = "User unauthorized")
     })
     public Mono<ResponseEntity> logout(Authentication authentication) {
         log.info(String.format("User %s logging out", authentication.getName()));

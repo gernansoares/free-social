@@ -37,21 +37,16 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
 
     /**
      * Verifies if token exists in security service
-     * Will ignore validation in service if active profiles = Profiles.TESTS_NO_AUTHENTICATION_SERVICE
      *
      * @param token token that will be validated
      */
     private Mono<String> validateTokenInService(String token) {
-        if (!Objects.equals(Profiles.TESTS_NO_AUTHENTICATION_SERVICE, environment.getActiveProfiles()[0])) {
-            return webClientBuilder.baseUrl("http://free-social-security")
-                    .build().get().uri(String.format("/token/%s", token))
-                    .retrieve()
-                    .toBodilessEntity()
-                    .onErrorResume(e -> Mono.empty())
-                    .flatMap(response -> Mono.just(token));
-        } else {
-            return Mono.just(token);
-        }
+        return webClientBuilder.baseUrl("http://free-social-security")
+                .build().get().uri(String.format("/token/%s", token))
+                .retrieve()
+                .toBodilessEntity()
+                .onErrorResume(e -> Mono.empty())
+                .flatMap(response -> Mono.just(token));
     }
 
     /**

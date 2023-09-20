@@ -1,5 +1,6 @@
 package com.freesocial.posts.service;
 
+import com.freesocial.lib.config.exceptions.UserNotFoundException;
 import com.freesocial.lib.properties.ErrorUtil;
 import com.freesocial.posts.common.util.Constants;
 import com.freesocial.posts.common.util.PostUtil;
@@ -50,7 +51,7 @@ public class PostService {
      */
     public void delete(String postUuid, String userUuid) {
         Optional<Post> postOpt = postRepository.findByPostUuid(postUuid);
-        Post post = postOpt.orElseThrow(() -> new IllegalArgumentException(ErrorUtil.getMessage(Constants.POST_NOT_FOUND)));
+        Post post = postOpt.orElseThrow(() -> new UserNotFoundException(ErrorUtil.getMessage(Constants.POST_NOT_FOUND)));
 
         postUtil.validatePostBelongsToUser(post, userUuid);
 
