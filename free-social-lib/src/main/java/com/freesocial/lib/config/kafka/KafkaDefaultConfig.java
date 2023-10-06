@@ -16,7 +16,7 @@ import java.util.Map;
 @Configuration
 public class KafkaDefaultConfig {
 
-    public static final String BOOTSTRAP_ADRESS = "raspberryge:9092";
+    public static final String BOOTSTRAP_ADRESS = "homeserver:9092";
 
     @Bean
     public KafkaAdmin kafkaAdmin() {

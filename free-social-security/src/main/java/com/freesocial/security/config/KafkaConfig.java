@@ -26,7 +26,7 @@ public class KafkaConfig {
 
     @Bean
     public ConcurrentKafkaListenerContainerFactory<String, String> deleteAllTokensKafkaListenerContainerFactory() {
-        return kafkaConsumerConfig.kafkaListenerContainerFactory(DELETE_ALL_TOKENS_TOPIC);
+        return kafkaConsumerConfig.kafkaListenerContainerFactory();
     }
 
 }

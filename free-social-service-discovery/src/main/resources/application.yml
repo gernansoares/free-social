@@ -14,4 +14,4 @@ eureka:
     registerWithEureka: false
     fetchRegistry: false
     service-url:
-      defaultZone: http://raspberryge:8085/eureka
+      defaultZone: http://homeserver:8085/eureka

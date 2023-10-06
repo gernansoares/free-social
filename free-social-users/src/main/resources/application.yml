@@ -22,7 +22,7 @@ spring:
     generate-ddl: true
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/freesocial?useSSL=false
+    url: jdbc:postgresql://localhost:5432/freesocial
     username: postgres
     password: "root"
     driver-class-name: org.postgresql.Driver
@@ -36,6 +36,6 @@ eureka:
     register-with-eureka: true
     fetch-registry: true
     service-url:
-      defaultZone: http://raspberryge:8085/eureka
+      defaultZone: http://homeserver:8085/eureka
   instance:
     lease-renewal-interval-in-seconds: 5
