@@ -5,6 +5,8 @@ import com.freesocial.lib.config.security.jwt.JwtUtil;
 import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.reactive.context.ReactiveWebServerApplicationContext;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,21 +34,33 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    @Autowired
-    private Environment environment;
+    @Value("${eureka.client.enabled}")
+    private boolean eurekaEnabled;
 
     /**
      * Verifies if token exists in security service
+     * If service discovery is not enabled (tests only) this validation will be ignored
      *
      * @param token token that will be validated
      */
     private Mono<String> validateTokenInService(String token) {
-        return webClientBuilder.baseUrl("http://free-social-security")
-                .build().get().uri(String.format("/token/%s", token))
-                .retrieve()
-                .toBodilessEntity()
-                .onErrorResume(e -> Mono.empty())
-                .flatMap(response -> Mono.just(token));
+        if (eurekaEnabled) {
+            log.debug("Validating token in service {}", token);
+
+            return webClientBuilder
+                    .baseUrl("http://free-social-security")
+                    .build().get().uri(String.format("/token/%s", token))
+                    .retrieve()
+                    .toBodilessEntity()
+                    .onErrorResume(e -> {
+                        e.printStackTrace();
+                        log.error("Invalid token in service {}", token);
+                        return Mono.empty();
+                    })
+                    .flatMap(response -> Mono.just(token));
+        } else {
+            return Mono.just(token);
+        }
     }
 
     /**
@@ -55,12 +69,17 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
      * @param token token that will be validated
      */
     private Mono<String> validateTokenIntegrity(String token) {
+        log.debug("Validating integrity {}", token);
+
         return Mono.just(token)
                 .flatMap(authToken -> {
                     jwtUtil.validateToken(authToken);
                     return Mono.just(authToken);
                 })
-                .onErrorResume(e -> Mono.empty());
+                .onErrorResume(e -> {
+                    log.error("Invalid token integrity  {}", token);
+                    return Mono.empty();
+                });
     }
 
     /**
@@ -71,6 +90,9 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
      */
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
+        String token = authentication.getCredentials().toString();
+
+        log.debug("Authenticating {}", token);
 
         return Mono.just(authentication.getCredentials().toString())
                 .flatMap(authToken -> validateTokenIntegrity(authToken))
@@ -78,6 +100,8 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
                 .flatMap(authToken -> {
                     Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
                     List<String> rolesMap = claims.get("role", List.class);
+
+                    log.debug("Token logged in successfully {}", token);
 
                     return Mono.just(new UsernamePasswordAuthenticationToken(
                             jwtUtil.getUsernameFromToken(authToken),

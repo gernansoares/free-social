@@ -16,6 +16,8 @@ Sample project of a social network implemented with microservices architecture
 * Spring Framework 6
 * Spring Boot 3
 * Spring Security
+* Spring Data JPA
+* Spring Data Redis
 * Spring Cloud Gateway
 * Spring WebFlux
 * Netflix Eureka  

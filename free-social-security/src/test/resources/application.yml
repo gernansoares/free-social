@@ -21,3 +21,7 @@ spring:
     max-pool-size: 250
     idle-timeout: 300000
     minIdle: 5
+
+eureka:
+  client:
+    enabled: false

@@ -7,6 +7,8 @@ import com.freesocial.lib.config.tests.BasicTest;
 import com.freesocial.security.FreeSocialSecurityApplication;
 import com.freesocial.security.dto.AuthRequest;
 import com.freesocial.security.dto.AuthResponse;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -17,11 +19,12 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
+import java.io.IOException;
+
 import static org.hamcrest.Matchers.notNullValue;
 
-@SpringBootTest(classes = FreeSocialSecurityApplication.class)
+@SpringBootTest(classes = FreeSocialSecurityApplication.class, webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @AutoConfigureWebTestClient
-@ActiveProfiles(Profiles.TESTS_NO_AUTHENTICATION_SERVICE)
 class LogoutControllerIntegrationTests extends BasicTest {
 
     @Autowired
@@ -50,16 +53,17 @@ class LogoutControllerIntegrationTests extends BasicTest {
         authRequest.setUsername("joseph");
         authRequest.setPassword("123123");
 
-        EntityExchangeResult<AuthResponse> token = webTestClient.post().uri("/auth/login")
+        String token = webTestClient.post().uri("/auth/login")
                 .contentType(MediaType.APPLICATION_JSON)
                 .bodyValue(new ObjectMapper().writeValueAsString(authRequest))
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody(AuthResponse.class)
-                .returnResult();
+                .returnResult().getResponseBody().getToken();
 
         webTestClient.post().uri("/logout/logout")
-                .headers(http -> http.setBearerAuth(token.getResponseBody().getToken()))
+                .contentType(MediaType.APPLICATION_JSON)
+                .headers(http -> http.setBearerAuth(token))
                 .exchange()
                 .expectStatus().isOk();
     }
